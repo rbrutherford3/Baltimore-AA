@@ -1,0 +1,146 @@
+/* CSS used by all the pages.  Note that a call to this CSS must occur after the bootstrap CSS call, if 
+being used, to override bootstrap's native styles */
+
+p, h1 {
+	max-width: 800px;
+	margin-bottom: 10px;
+}
+
+html *
+{
+   font-family: "Trebuchet MS", Helvetica, sans-serif;
+   font-size: 14px;
+   
+}
+
+h1 {
+	font-size: 24px;
+}
+
+h2 {
+	font-size: 18px;
+	margin-top: 10px;
+/*	margin-top: 0px; */
+}
+
+a.button {
+	background-color: transparent;
+	border: none;
+    color: #034F84;
+    padding: 8px 18px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+	margin-right:15px;
+	border: 2px solid #034F84;
+}
+
+a.button:hover {
+	background-color: #034F84;
+	color: white;
+	text-decoration: none;
+}
+
+a.button:active {
+	text-decoration: none;
+}
+
+a {
+	color: blue;
+}
+
+body {
+	background-color: #ccccff;
+}
+
+textarea {
+	resize: none;
+}
+
+button, input[type=submit] {
+    background-color: #034F84;
+	border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+	margin-right:15px;
+}
+button:hover, input[type=submit]:hover {
+	box-shadow: 0 0 3px black;
+}
+
+.group, .person, .institution, .meeting {
+	color: black;
+	display: inline-block;
+	text-align: left;
+	background-color: #92a8d1;
+	/* border: 1px solid #000066;  */
+	box-shadow: 0 3px 3px #888888;
+	border: 1px solid #888888;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-left: 10px; 
+	padding-right: 10px;
+	margin-top:10px;
+	margin-bottom:10px;
+	margin-left: 0 auto;
+	margin-right: 0 auto;
+}
+
+input[type="text"] {
+	line-height: normal;
+}
+
+/* container and page are used to wrap group and person */
+/* .container {
+	display: inline-block;
+    margin-left: auto;
+    margin-right: auto;	
+	margin-bottom: 10px;
+	text-align: center;
+	min-width: 350px;
+} */
+
+.page {
+	display: table-row;
+}
+
+.name, .notes, .address {
+	width: 300px;
+}
+
+.notes {
+	resize: none;
+}
+
+.initial {
+	width: 20px;
+}
+
+.city {
+	width: 150px;
+}
+
+.zip {
+	width: 50px;
+}
+
+.citycontainer {
+	float: left;
+	display: inline-block;
+}
+
+.zipcontainer {
+	float: right; 
+	display: inline-block;
+}
+
+.pulldown {
+	max-width: 300px;
+}
+
+td {
+	vertical-align: text-top;
+}
