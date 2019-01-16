@@ -31,13 +31,22 @@ class assignment {
 	public function viewAll($monthQ, $yearQ, $groupQ, $meetingQ, $sort, $edit) {
 		
 		// SET UP ASSIGNMENTS SQL
-		// if either month or year are unspecified, then query all dates
-		if (is_null($monthQ) || is_null($yearQ)) {
+		// create different date SQL statements based on whether month and/or year were specified
+		if (is_null($monthQ) && is_null($yearQ)) {
 			$month = null;
 			$year = null;
 			$dateSQL = "WHERE `Date` IS NOT NULL ";
 		}
-		// otherwise grab month and year and set up SQL
+		elseif (is_null($monthQ) && !is_null($yearQ)) {
+			$month = null;
+			$year = $yearQ;
+			$dateSQL = "WHERE YEAR(`Date`)=:year ";
+		}
+		elseif (!is_null($monthQ) && is_null($yearQ)) {
+			$month = $monthQ;
+			$year = null;
+			$dateSQL = "WHERE MONTH(`Date`)=:month ";
+		}
 		else {
 			$month = $monthQ;
 			$year = $yearQ;
@@ -110,8 +119,10 @@ class assignment {
 			$scopeSQL;
 			
 		$stmtAssignments = $this->db->prepare($sqlAssignments);
-		if (!is_null($monthQ) && !is_null($yearQ)) {
+		if (!is_null($monthQ)) {
 			$stmtAssignments->bindValue(":month", $month, PDO::PARAM_INT);
+		}
+		if (!is_null($yearQ)) {
 			$stmtAssignments->bindValue(":year", $year, PDO::PARAM_INT);
 		}
 		if (!is_null($groupQ)) {
@@ -493,14 +504,26 @@ class assignment {
 	// parameters to include all data from the database (including rep and sponsor info) associated with an assignment
 	public function export($monthQ, $yearQ, $groupQ, $meetingQ, $sort) {
 		
+		$alldates = false;
+		
 		// SET UP "SCOPE SQL (copied from assignments.php, yeah I know...)
-		// if either month or year are unspecified, then query all dates
-		if (is_null($monthQ) || is_null($yearQ)) {
+		// create different date SQL statements based on whether month and/or year were specified
+		if (is_null($monthQ) && is_null($yearQ)) {
+			$alldates = true;
 			$month = null;
 			$year = null;
 			$dateSQL = "WHERE `Date` IS NOT NULL ";
 		}
-		// otherwise grab month and year and set up SQL
+		elseif (is_null($monthQ) && !is_null($yearQ)) {
+			$month = null;
+			$year = $yearQ;
+			$dateSQL = "WHERE YEAR(`Date`)=:year ";
+		}
+		elseif (!is_null($monthQ) && is_null($yearQ)) {
+			$month = $monthQ;
+			$year = null;
+			$dateSQL = "WHERE MONTH(`Date`)=:month ";
+		}
 		else {
 			$month = $monthQ;
 			$year = $yearQ;
@@ -625,8 +648,10 @@ class assignment {
 		
 		$stmt = $this->db->prepare($sql);
 		
-		if (!is_null($monthQ) && !is_null($yearQ)) {
+		if (!is_null($monthQ)) {
 			$stmt->bindValue(":month", $month, PDO::PARAM_INT);
+		}
+		if (!is_null($yearQ)) {
 			$stmt->bindValue(":year", $year, PDO::PARAM_INT);
 		}
 		if (!is_null($groupQ)) {
@@ -658,9 +683,62 @@ class assignment {
 			}
 		}
 		
+		
+		
+		// Set up filename
+
+		if ($alldates) {
+			if(is_null($groupQ) && is_null($meetingQ)) {
+				$filenameDate = ' - All assignments';
+			}
+			else {
+				$filenameDate = ' - All dates';
+			}
+		}
+		elseif (is_null($monthQ)) {
+			$filenameDate = ' - ' . $yearQ;
+		}
+		elseif (is_null($yearQ)) {
+			$dateObj   = DateTime::createFromFormat('!m', $monthQ);
+			$monthName = $dateObj->format('F');
+			$filenameDate = ' - ' . $monthName . ', all years';
+		}
+		else {
+			$filenameDate = ' - ' . $yearQ . '-' . (strlen($monthQ) == 1 ? ('0' . $monthQ) : $monthQ);
+		}
+		$filenameGroup = '';
+		if (!is_null($groupQ)) {
+			$sqlGroup = "SELECT `Name` FROM `groups` WHERE `ID`=:group;";
+			$stmtGroup = $this->db->prepare($sqlGroup); 
+			$stmtGroup->bindValue(":group", $groupQ, PDO::PARAM_INT);
+			if ($stmtGroup->execute()) {
+				if ($stmtGroup->rowCount() > 0) {
+					$rowGroup = $stmtGroup->fetch(PDO::FETCH_ASSOC);
+					$filenameGroup .= ' - ' . $rowGroup['Name'];
+				}
+			}
+		}
+		$filenameMeeting = '';
+		if (!is_null($meetingQ)) {
+			$sqlMeeting = "SELECT `DisplayID` FROM `meetings` WHERE `ID`=:meeting;";
+			$stmtMeeting = $this->db->prepare($sqlMeeting);
+			$stmtMeeting->bindValue(":meeting", $meetingQ, PDO::PARAM_INT);
+			if ($stmtMeeting->execute()) {
+				if ($stmtMeeting->rowCount() > 0) {
+					$rowMeeting = $stmtMeeting->fetch(PDO::FETCH_ASSOC);
+					$filenameMeeting .= ' - Meeting ' . $rowMeeting['DisplayID'];
+				}
+			}
+		}
+		
+		$filename = $filenameGroup . $filenameMeeting . $filenameDate;
+		
+		date_default_timezone_set('US/Eastern');
+		$timeStamp = date('YmdHis');
+
 		// Export the data and prompt a tsv file for download
-		header("Content-type: text/plain");
-		header("Content-Disposition: attachment; filename='Meeting Asssignments Export.tsv'");
+		header('Content-type: text/plain');
+		header('Content-Disposition: attachment; filename="Balt AA Inst Comm Mtg Mgr - Export ' . $timeStamp . $filename . '.tsv"');
 		echo($tsv_export);
 	}	
 }
