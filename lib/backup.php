@@ -159,8 +159,13 @@ gzclose($zp);
 fclose($handle);
 } */
 
-header("Content-type: text/plain");
-header("Content-Disposition: attachment; filename='MySQL Database Backup.sql'");
+date_default_timezone_set('US/Eastern');
+$timeStamp = date('YmdHis');
+
+echo '<script>alert("' . $timeStamp . '")';
+
+header('Content-type: text/plain');
+header('Content-Disposition: attachment; filename="Balt AA Inst Comm Mtng Mngr -  MySQL Dump ' . $timeStamp . '.sql"');
 echo($output);
 
 }
