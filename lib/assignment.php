@@ -118,18 +118,27 @@ class assignment {
 			ON a.`Group`=g.`ID`" .
 			$scopeSQL;
 			
+		$monthView = true;
 		$stmtAssignments = $this->db->prepare($sqlAssignments);
 		if (!is_null($monthQ)) {
 			$stmtAssignments->bindValue(":month", $month, PDO::PARAM_INT);
 		}
+		else {
+			$monthView = false;
+		}
 		if (!is_null($yearQ)) {
 			$stmtAssignments->bindValue(":year", $year, PDO::PARAM_INT);
 		}
+		else {
+			$monthView = false;
+		}
 		if (!is_null($groupQ)) {
 			$stmtAssignments->bindValue(":group", $groupQ, PDO::PARAM_INT);
+			$monthView = false;
 		}
 		if (!is_null($meetingQ)) {
 			$stmtAssignments->bindValue(":meeting", $meetingQ, PDO::PARAM_INT);
+			$monthView = false;
 		}
 		// Execute the SQL statement and store the results
 		if ($stmtAssignments->execute()) {
@@ -139,6 +148,19 @@ class assignment {
 				$results=true;
 			}
 		}
+		
+		// See if there are any incomplete meeting assignments (no groups)
+		$complete = true;
+		//$counter = 0;
+		foreach($rowsAssignments as $row) {
+			if (is_null($row['GroupID'])) {
+				//echo '<script>alert("' . $counter . '");</script>';
+				$complete = false;
+			}
+			//$counter++;
+		}
+		
+		//echo '<script>alert("' . ($incomplete ? 'Missing Entries' : 'No missing entries'). '");</script>';
 		
 		// If editing assignments, query compatible groups for each meeting for the drop-down menu
 		if ($edit) {
@@ -246,7 +268,14 @@ class assignment {
 				<title>Institution Committee - Edit Assignments</title>
 			</head>
 			<body>';
-
+			
+			// Add option to automatically finish missing entries if in a one-month view of all groups and meetings
+			if ($monthView && !$complete) {
+				echo '
+				<form name="form" action="fillform.php" method="post">
+				<input type="hidden" name="month" value="' .  $month . '">
+				<input type="hidden" name="year" value="' . $year . '">';
+			}
 			// Start Body HTML, define table and table headers
 			echo '
 				<h1>Institution Assignments</h1>
@@ -255,7 +284,13 @@ class assignment {
 				<a class="button" href="viewform.php">Search</a>
 				<a class="button" href="createform.php">Create</a>
 				<a class="button" href="edit.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . '">Edit</a>
-				<a class="button" href="export.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . '">Export</a>
+				<a class="button" href="export.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . '">Export</a>';
+						// Add option to automatically finish missing entries if in a one-month view of all groups and meetings
+			if ($monthView && !$complete) {
+				echo '
+				<input type="submit" value="Fill missing entries" style="background-color:red;">';
+			}	
+			echo '
 				</p>';
 		}
 		
@@ -273,7 +308,7 @@ class assignment {
 							<th>Meeting ID</th>
 							<th>Day of Week</th>
 							<th>Institution</th>
-							<th>Group</th>						
+							<th>Group (last month assigned to institiution)</th>						
 							<th>Notes</th>						
 						</tr>
 					</thead>
@@ -377,11 +412,9 @@ class assignment {
 								<select style="width: 300px;" name="group[' . $count . ']" 
 								onchange="document.forms[\'form\'][\'changed[' . $count . ']\'].value=1; matchCheck(' . $count . ', ' . $countMax . ');">';
 					
-					// Show special text if there was no selection
-					if($noSelection) {
-						echo '
+					// No selection
+					echo '
 									<option value="" selected>***No group selected!***</option>';
-					}
 					
 					// Sponsor's night selection
 					echo '
@@ -414,7 +447,7 @@ class assignment {
 							<td nowrap><a href="../meetings/view.php?id=' . $meeting . '">' . $row['DisplayID'] . '</a></td>
 							<td nowrap>' . $dow->getFormatted() . '</td>
 							<td nowrap>' . $row['Institution'] . '</td>
-							<td nowrap>' . (($noSelection) ? '<b>No Selection Made!</b>' : (($sponsorsNight) ? '<i>SPONSOR\'S NIGHT</i>' : '<a href="../groups/view.php?id=' . $group . '">' . $groupName . '</a>')) . '</td>
+							<td nowrap>' . (($noSelection) ? '<font color="red"><b>No Selection Made!</b></font>' : (($sponsorsNight) ? '<i>SPONSOR\'S NIGHT</i>' : '<a href="../groups/view.php?id=' . $group . '">' . $groupName . '</a>')) . '</td>
 							<td nowrap>' . $row['Notes'] . '</td>
 						</tr>';
 				}
@@ -440,8 +473,17 @@ class assignment {
 					<a class="button" href="viewform.php">Search</a>
 					<a class="button" href="createform.php">Create</a>
 					<a class="button" href="edit.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . '">Edit</a>
-					<a class="button" href="export.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . '">Export</a>
+					<a class="button" href="export.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . '">Export</a>';
+				if ($monthView && !$complete) {
+					echo '
+					<input type="submit" value="Fill missing entries" style="background-color:red;">';
+				}
+				echo '
 					</p>';
+				if ($monthView && !$complete) {
+					echo '
+					</form>';
+				}
 			}
 			
 			// If we're viewing a whole month, then we should show the standby and probation groups

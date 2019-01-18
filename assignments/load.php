@@ -1,23 +1,4 @@
 <?php
-/* if (isset($_GET['aID'])) {
-	$assignmentID = $_GET['aID'];
-	if (isset($_GET['gID'])) {
-		$groupID = $_GET['gID'];
-	}
-	else {
-		$groupID = null;
-	}
-	$sql = "UPDATE assignments SET `Group`=:groupID WHERE `ID`=:assignment;";
-	$stmt = $db->prepare($sql);
-	$stmt->bindValue(":groupID", $groupID, PDO::PARAM_INT);
-	$stmt->bindValue(":assignment", $assignmentID, PDO::PARAM_INT);
-	if (!$stmt->execute()) {
-		echo '<script>alert("Changing assignment failed!");</script>';
-	}
-}
-else {
-	$assignmentID=null;
-} */
 
 include_once '../lib/datatypes.php';
 include_once '../lib/dbconnect.php';
@@ -66,7 +47,7 @@ for($i=0; $i<count($assignment); $i++) {
 		$newnotes = new notes($notes[$i]);
 		$sql = "UPDATE assignments SET `Group`=:group, `Notes`:=:notes WHERE `ID`=:assignment;";
 		$stmt = $db->prepare($sql);
-		$stmt->bindValue(":group", $group[$i], PDO::PARAM_INT);
+		$stmt->bindValue(":group", ($group[$i]=='' ? null : $group[$i]), PDO::PARAM_INT);
 		$stmt->bindValue(":notes", $newnotes->getValue(), PDO::PARAM_STR);
 		$stmt->bindValue(":assignment", $assignment[$i], PDO::PARAM_INT);
 		if (!$stmt->execute()) {
