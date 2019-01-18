@@ -9,4 +9,4 @@ lib/phptest.php
 lib/font/
 lib/makefont/
 lib/fpdf.php
-lib/dbconnect.php
+*dbconnect.php
