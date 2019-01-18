@@ -8,8 +8,6 @@ $tables = array();
 
 backup_tables($db, $tables);
 
-
-
 function backup_tables($DBH, $tables) {
 
 $DBH->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_NATURAL );
@@ -20,14 +18,12 @@ $BACKUP_PATH = "";
 $nowtimename = time();
 $output = '';
 
-
 //create/open files
 /* if ($compression) {
 $zp = gzopen($BACKUP_PATH.$nowtimename.'.sql.gz', "a9");
 } else {
 $handle = fopen($BACKUP_PATH.$nowtimename.'.sql','a+');
 } */
-
 
 //array of all database field types which just take numbers 
 $numtypes=array('tinyint','smallint','mediumint','int','bigint','float','double','decimal','real');
@@ -52,7 +48,6 @@ $num_rows = $result->rowCount();
 $return="";
 //uncomment below if you want 'DROP TABLE IF EXISTS' displayed
 //$return.= 'DROP TABLE IF EXISTS `'.$table.'`;'; 
-
 
 //table structure
 $pstm2 = $DBH->query("SHOW CREATE TABLE $table");
@@ -144,8 +139,6 @@ fwrite($handle,$return);
 $return = "";
 }
 
-
-
 $error1= $pstm2->errorInfo();
 $error2= $pstm3->errorInfo();
 $error3= $result->errorInfo();
@@ -161,8 +154,6 @@ fclose($handle);
 
 date_default_timezone_set('US/Eastern');
 $timeStamp = date('YmdHis');
-
-echo '<script>alert("' . $timeStamp . '")';
 
 header('Content-type: text/plain');
 header('Content-Disposition: attachment; filename="Balt AA Inst Comm Mtng Mngr -  MySQL Dump ' . $timeStamp . '.sql"');
