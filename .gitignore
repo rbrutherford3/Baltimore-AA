@@ -1,12 +1,1 @@
-groups/retired/
-lib/retired/
-assignments/history (old).csv
-assignments/history.csv
-lib/Goals.txt
-*.htaccess
-*tester*.php
-lib/phptest.php
-lib/font/
-lib/makefont/
-lib/fpdf.php
 lib/dbconnect.php
