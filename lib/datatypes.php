@@ -490,7 +490,12 @@ class phone extends text implements HTML {
 	
 	// Format number as (XXX) XXX-XXXX
 	protected function format() {
-		$this->formatted = '(' . $this->phone1->getFormatted() . ') ' . $this->phone2->getFormatted() . '-' . $this->phone3->getFormatted();
+		if (is_numeric($this->phone1->getValue()) && is_numeric($this->phone2->getValue()) && is_numeric($this->phone3->getValue())) {
+			$this->formatted = '(' . $this->phone1->getFormatted() . ') ' . $this->phone2->getFormatted() . '-' . $this->phone3->getFormatted();
+		}
+		else {
+			$this->formatted = '';
+		}
 	}
 	
 	// Get functions

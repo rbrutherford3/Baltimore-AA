@@ -30,6 +30,8 @@ class assignment {
 	$edit: true if editing assignments, false if simply viewing them */
 	public function viewAll($monthQ, $yearQ, $groupQ, $meetingQ, $sort, $edit) {
 		
+		$viewPeople = false;
+		
 		// SET UP ASSIGNMENTS SQL
 		// create different date SQL statements based on whether month and/or year were specified
 		if (is_null($monthQ) && is_null($yearQ)) {
@@ -108,14 +110,41 @@ class assignment {
 			g.`Name` AS `Group`, 
 			a.`Notes`, 
 			m.`Gender`, 
-			i.`BG`
-			FROM assignments a 
+			i.`BG`" . 
+			($viewPeople ? ",
+			r.`Name` AS `RepName`,
+			r.`Initial` AS `RepInitial`,
+			r.`Phone` AS `RepPhone`,
+			r2.`Name` AS `Rep2Name`,
+			r2.`Initial` AS `Rep2Initial`,
+			r2.`Phone` AS `Rep2Phone`,
+			s.`Name` AS `SponsorName`,
+			s.`Initial` AS `SponsorInitial`,
+			s.`Phone` AS `SponsorPhone`,
+			c.`Name` AS `CoSponsorName`,
+			c.`Initial` AS `CoSponsorInitial`,
+			c.`Phone` AS `CoSponsorPhone`,
+			c2.`Name` AS `CoSponsor2Name`,
+			c2.`Initial` AS `CoSponsor2Initial`,
+			c2.`Phone` AS `CoSponsor2Phone`" : "") .
+			"FROM assignments a 
 			LEFT JOIN meetings m 
 			ON a.`Meeting`=m.`ID` 
 			LEFT JOIN institutions i 
 			ON m.`Institution`=i.ID 
 			LEFT JOIN groups g 
-			ON a.`Group`=g.`ID`" .
+			ON a.`Group`=g.`ID`" . 
+			($viewPeople ? "
+			LEFT JOIN people r 
+			ON g.`Rep`=r.`ID`
+			LEFT JOIN people r2
+			ON g.`Rep2`=r2.`ID`
+			LEFT JOIN people s 
+			ON m.`Sponsor`=s.`ID`
+			LEFT JOIN people c
+			ON m.`CoSponsor`=c.`ID`
+			LEFT JOIN people c2
+			ON m.`CoSponsor2`=c2.`ID`" : "") .				
 			$scopeSQL;
 			
 		$monthView = true;
@@ -149,84 +178,88 @@ class assignment {
 			}
 		}
 		
-		// See if there are any incomplete meeting assignments (no groups)
-		$complete = true;
-		//$counter = 0;
-		foreach($rowsAssignments as $row) {
-			if (is_null($row['GroupID'])) {
-				//echo '<script>alert("' . $counter . '");</script>';
-				$complete = false;
-			}
-			//$counter++;
-		}
+		// Only do the following if the query was successful...
+		if ($results) {
 		
-		//echo '<script>alert("' . ($incomplete ? 'Missing Entries' : 'No missing entries'). '");</script>';
-		
-		// If editing assignments, query compatible groups for each meeting for the drop-down menu
-		if ($edit) {
-			$rowsMeetings = array();
-			$sqlMeetings = "SELECT m.ID, DOW, BG, Gender FROM meetings m LEFT JOIN institutions i ON m.`Institution`=i.`ID`;";
-			$stmtMeetings = $this->db->prepare($sqlMeetings);
-			if ($stmtMeetings->execute()) {
-				while ($rowMeetings = $stmtMeetings->fetch(PDO::FETCH_ASSOC)) {
-					// Note that we're not just storing in sequence, but rather using an associative key to be able to
-					// lookup the various meetings later on.
-					$rowsMeetings[$rowMeetings['ID']] = $rowMeetings;
+			// See if there are any incomplete meeting assignments (no groups)
+			$complete = true;
+			//$counter = 0;
+			foreach($rowsAssignments as $row) {
+				if (is_null($row['GroupID'])) {
+					//echo '<script>alert("' . $counter . '");</script>';
+					$complete = false;
 				}
+				//$counter++;
 			}
 			
-			// Query the compatible groups for each meeting
-			// (Note the use of pass-by-referencing to be able to edit the contents of the array)
-			foreach($rowsMeetings as &$rowMeetings) {
-				// Set up groups SQL
-				if ($rowMeetings['BG']) {
-					$bgSQL = "AND BG ";
+			//echo '<script>alert("' . ($incomplete ? 'Missing Entries' : 'No missing entries'). '");</script>';
+		
+			// If editing assignments, query compatible groups for each meeting for the drop-down menu
+			if ($edit) {
+				$rowsMeetings = array();
+				$sqlMeetings = "SELECT m.ID, DOW, BG, Gender FROM meetings m LEFT JOIN institutions i ON m.`Institution`=i.`ID`;";
+				$stmtMeetings = $this->db->prepare($sqlMeetings);
+				if ($stmtMeetings->execute()) {
+					while ($rowMeetings = $stmtMeetings->fetch(PDO::FETCH_ASSOC)) {
+						// Note that we're not just storing in sequence, but rather using an associative key to be able to
+						// lookup the various meetings later on.
+						$rowsMeetings[$rowMeetings['ID']] = $rowMeetings;
+					}
 				}
-				else {
-					$bgSQL = "";
-				}
-				if ($rowMeetings['Gender']==1) {
-					$genderSQL = "AND Gender<>2 ";
-				}
-				else if ($rowMeetings['Gender']==2) {
-					$genderSQL = "AND Gender<>1 ";
-				}
-				else {
-					$genderSQL = "";
-				}
-				// Note that we're also querying the date the group was last at the institution of a
-				// given meeting in the first portion of the query.  This date cannot be the query month.
-				// This is all for the user to be able to pick an appropriate group.
-				$sqlGroups = "SELECT `ID` AS `gID`, `Name`, 
-						(SELECT MAX(`Date`) 
-						FROM assignments 
-						WHERE `Meeting` IN 
-						(SELECT `ID` FROM meetings WHERE `Institution` IN 
-							(SELECT `Institution` 
-								FROM meetings 
-								WHERE `ID`=:meeting
+				
+				// Query the compatible groups for each meeting
+				// (Note the use of pass-by-referencing to be able to edit the contents of the array)
+				foreach($rowsMeetings as &$rowMeetings) {
+					// Set up groups SQL
+					if ($rowMeetings['BG']) {
+						$bgSQL = "AND BG ";
+					}
+					else {
+						$bgSQL = "";
+					}
+					if ($rowMeetings['Gender']==1) {
+						$genderSQL = "AND Gender<>2 ";
+					}
+					else if ($rowMeetings['Gender']==2) {
+						$genderSQL = "AND Gender<>1 ";
+					}
+					else {
+						$genderSQL = "";
+					}
+					// Note that we're also querying the date the group was last at the institution of a
+					// given meeting in the first portion of the query.  This date cannot be the query month.
+					// This is all for the user to be able to pick an appropriate group.
+					$sqlGroups = "SELECT `ID` AS `gID`, `Name`, 
+							(SELECT MAX(`Date`) 
+							FROM assignments 
+							WHERE `Meeting` IN 
+							(SELECT `ID` FROM meetings WHERE `Institution` IN 
+								(SELECT `Institution` 
+									FROM meetings 
+									WHERE `ID`=:meeting
+								)
 							)
-						)
-						AND `Group`=`gID`
-						AND NOT (MONTH(`Date`)=:month AND YEAR(`Date`)=:year)
-						) AS `Date`
-						FROM groups g
-						WHERE Active 
-						AND (DOW=127 OR DOW=62 OR NOT (DOW & :dow)) 
-						" . $bgSQL . "
-						" . $genderSQL . "
-						ORDER BY `Name`
-						;";
-				$stmtGroups = $this->db->prepare($sqlGroups);
-				$stmtGroups->bindValue(":meeting", $rowMeetings['ID'], PDO::PARAM_INT);
-				$stmtGroups->bindValue(":month", $month, PDO::PARAM_INT);
-				$stmtGroups->bindValue(":year", $year, PDO::PARAM_INT);
-				$stmtGroups->bindValue(":dow", $rowMeetings['DOW'], PDO::PARAM_INT);
-				// Store all the groups in the meetings array
-				if ($stmtGroups->execute()) {
-					while ($rowGroups = $stmtGroups->fetch(PDO::FETCH_ASSOC)) {
-						// This line is why we need pass-by-reference
-						$rowMeetings['Groups'][] = $rowGroups;
+							AND `Group`=`gID`
+							AND NOT (MONTH(`Date`)=:month AND YEAR(`Date`)=:year)
+							) AS `Date`
+							FROM groups g
+							WHERE Active 
+							AND (DOW=127 OR DOW=62 OR NOT (DOW & :dow)) 
+							" . $bgSQL . "
+							" . $genderSQL . "
+							ORDER BY `Name`
+							;";
+					$stmtGroups = $this->db->prepare($sqlGroups);
+					$stmtGroups->bindValue(":meeting", $rowMeetings['ID'], PDO::PARAM_INT);
+					$stmtGroups->bindValue(":month", $month, PDO::PARAM_INT);
+					$stmtGroups->bindValue(":year", $year, PDO::PARAM_INT);
+					$stmtGroups->bindValue(":dow", $rowMeetings['DOW'], PDO::PARAM_INT);
+					// Store all the groups in the meetings array
+					if ($stmtGroups->execute()) {
+						while ($rowGroups = $stmtGroups->fetch(PDO::FETCH_ASSOC)) {
+							// This line is why we need pass-by-reference
+							$rowMeetings['Groups'][] = $rowGroups;
+						}
 					}
 				}
 			}
@@ -282,14 +315,17 @@ class assignment {
 				<p>
 				<a class="button" href="../">Home</a>
 				<a class="button" href="viewform.php">Search</a>
-				<a class="button" href="createform.php">Create</a>
-				<a class="button" href="edit.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . '">Edit</a>
-				<a class="button" href="export.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . '">Export</a>';
-						// Add option to automatically finish missing entries if in a one-month view of all groups and meetings
-			if ($monthView && !$complete) {
+				<a class="button" href="createform.php">Create</a>';
+			if ($results) {
 				echo '
-				<input type="submit" value="Fill missing entries" style="background-color:red;">';
-			}	
+					<a class="button" href="edit.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . '">Edit</a>
+					<a class="button" href="export.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . '">Export</a>';
+							// Add option to automatically finish missing entries if in a one-month view of all groups and meetings
+				if ($monthView && !$complete) {
+					echo '
+					<input type="submit" value="Fill missing entries" style="background-color:red;">';
+				}
+			}
 			echo '
 				</p>';
 		}
@@ -331,8 +367,26 @@ class assignment {
 							<th>Institution
 							<a style="text-decoration:none;" href="viewall.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=4">&#9650</a>
 							<a style="text-decoration:none;" href="viewall.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=5">&#9660</a>
-							</th>
-							<th>Group</th>						
+							</th>';
+				if ($viewPeople) {	
+					echo '
+								<th>Sponsor</th>
+								<th>Sponsor Phone</th>
+								<th>Cosponsor</th>
+								<th>Cosponsor Phone</th>
+								<th>Cosponsor 2</th>
+								<th>Cosponsor 2 Phone</th>';
+				}
+				echo '
+							<th>Group</th>';
+				if ($viewPeople) {
+					echo '
+								<th>Group Rep</th>
+								<th>Rep Phone</th>
+								<th>Group Rep 2</th>
+								<th>Rep 2 Phone</th>';
+				}
+				echo '
 							<th>Notes</th>						
 						</tr>
 					</thead>';
@@ -441,13 +495,36 @@ class assignment {
 				
 				// If viewing, display without pulldown menus (note the links to the meetings and groups)
 				else {
+					$repPhone = new phone($row['RepPhone']);
+					$rep2Phone = new phone($row['Rep2Phone']);
+					$sponsorPhone = new phone($row['SponsorPhone']);
+					$coSponsorPhone = new phone($row['CoSponsorPhone']);
+					$coSponsor2Phone = new phone($row['CoSponsor2Phone']);
 					echo '
 						<tr class="rowA">
 							<td nowrap>' . $mdate->getFormatted() . '</td>
 							<td nowrap><a href="../meetings/view.php?id=' . $meeting . '">' . $row['DisplayID'] . '</a></td>
 							<td nowrap>' . $dow->getFormatted() . '</td>
-							<td nowrap>' . $row['Institution'] . '</td>
-							<td nowrap>' . (($noSelection) ? '<font color="red"><b>No Selection Made!</b></font>' : (($sponsorsNight) ? '<i>SPONSOR\'S NIGHT</i>' : '<a href="../groups/view.php?id=' . $group . '">' . $groupName . '</a>')) . '</td>
+							<td nowrap>' . $row['Institution'] . '</td>';
+					if ($viewPeople) {
+						echo '
+								<td nowrap>' . $row['SponsorName'] . ' ' . $row['SponsorInitial'] . '</td>
+								<td nowrap>' . $sponsorPhone->getFormatted() . '</td>
+								<td nowrap>' . $row['CoSponsorName'] . ' ' . $row['CoSponsorInitial'] . '</td>
+								<td nowrap>' . $coSponsorPhone->getFormatted() . '</td>
+								<td nowrap>' . $row['CoSponsor2Name'] . ' ' . $row['CoSponsor2Initial'] . '</td>
+								<td nowrap>' . $coSponsor2Phone->getFormatted() . '</td>';
+					}
+					echo '
+							<td nowrap>' . (($noSelection) ? '<font color="red"><b>No Selection Made!</b></font>' : (($sponsorsNight) ? '<i>SPONSOR\'S NIGHT</i>' : '<a href="../groups/view.php?id=' . $group . '">' . $groupName . '</a>')) . '</td>';
+					if ($viewPeople) {
+						echo '
+								<td nowrap>' . $row['RepName'] . ' ' . $row['RepInitial'] . '</td>
+								<td nowrap>' . $repPhone->getFormatted() . '</td>
+								<td nowrap>' . $row['Rep2Name'] . ' ' . $row['Rep2Initial'] . '</td>
+								<td nowrap>' . $rep2Phone->getFormatted() . '</td>';
+					}
+					echo '
 							<td nowrap>' . $row['Notes'] . '</td>
 						</tr>';
 				}
