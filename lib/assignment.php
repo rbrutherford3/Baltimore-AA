@@ -31,6 +31,8 @@ class assignment {
 	public function viewAll($monthQ, $yearQ, $groupQ, $meetingQ, $sort, $edit) {
 		
 		$viewPeople = false;
+		$viewLinks = true;
+		$viewAddress = false;
 		
 		// SET UP ASSIGNMENTS SQL
 		// create different date SQL statements based on whether month and/or year were specified
@@ -111,6 +113,10 @@ class assignment {
 			a.`Notes`, 
 			m.`Gender`, 
 			i.`BG`" . 
+			($viewAddress ? ",
+			i.`Address`,
+			i.`City`,
+			i.`Zip`" : "") . 
 			($viewPeople ? ",
 			r.`Name` AS `RepName`,
 			r.`Initial` AS `RepInitial`,
@@ -368,23 +374,28 @@ class assignment {
 							<a style="text-decoration:none;" href="viewall.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=4">&#9650</a>
 							<a style="text-decoration:none;" href="viewall.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=5">&#9660</a>
 							</th>';
+				if ($viewAddress) {
+					echo '
+							<th>Address</th>
+					';
+				}
 				if ($viewPeople) {	
 					echo '
-								<th>Sponsor</th>
-								<th>Sponsor Phone</th>
-								<th>Cosponsor</th>
-								<th>Cosponsor Phone</th>
-								<th>Cosponsor 2</th>
-								<th>Cosponsor 2 Phone</th>';
+							<th>Sponsor</th>
+							<th>Sponsor Phone</th>
+							<th>Cosponsor</th>
+							<th>Cosponsor Phone</th>
+							<th>Cosponsor 2</th>
+							<th>Cosponsor 2 Phone</th>';
 				}
 				echo '
 							<th>Group</th>';
 				if ($viewPeople) {
 					echo '
-								<th>Group Rep</th>
-								<th>Rep Phone</th>
-								<th>Group Rep 2</th>
-								<th>Rep 2 Phone</th>';
+							<th>Group Rep</th>
+							<th>Rep Phone</th>
+							<th>Group Rep 2</th>
+							<th>Rep 2 Phone</th>';
 				}
 				echo '
 							<th>Notes</th>						
@@ -503,26 +514,33 @@ class assignment {
 					echo '
 						<tr class="rowA">
 							<td nowrap>' . $mdate->getFormatted() . '</td>
-							<td nowrap><a href="../meetings/view.php?id=' . $meeting . '">' . $row['DisplayID'] . '</a></td>
+							<td nowrap>' . ($viewLinks ? '<a href="../meetings/view.php?id=' . $meeting . '">' : '') . $row['DisplayID'] . 
+								($viewLinks ? '</a>' : '') . '</td>
 							<td nowrap>' . $dow->getFormatted() . '</td>
 							<td nowrap>' . $row['Institution'] . '</td>';
+					if ($viewAddress) {
+						echo '
+							<td nowrap>' . $row['Address'] . ', ' . $row['City'] . ', MD ' . $row['Zip'] . '</td>';
+					}
 					if ($viewPeople) {
 						echo '
-								<td nowrap>' . $row['SponsorName'] . ' ' . $row['SponsorInitial'] . '</td>
-								<td nowrap>' . $sponsorPhone->getFormatted() . '</td>
-								<td nowrap>' . $row['CoSponsorName'] . ' ' . $row['CoSponsorInitial'] . '</td>
-								<td nowrap>' . $coSponsorPhone->getFormatted() . '</td>
-								<td nowrap>' . $row['CoSponsor2Name'] . ' ' . $row['CoSponsor2Initial'] . '</td>
-								<td nowrap>' . $coSponsor2Phone->getFormatted() . '</td>';
+							<td nowrap>' . $row['SponsorName'] . ' ' . $row['SponsorInitial'] . '</td>
+							<td nowrap>' . $sponsorPhone->getFormatted() . '</td>
+							<td nowrap>' . $row['CoSponsorName'] . ' ' . $row['CoSponsorInitial'] . '</td>
+							<td nowrap>' . $coSponsorPhone->getFormatted() . '</td>
+							<td nowrap>' . $row['CoSponsor2Name'] . ' ' . $row['CoSponsor2Initial'] . '</td>
+							<td nowrap>' . $coSponsor2Phone->getFormatted() . '</td>';
 					}
 					echo '
-							<td nowrap>' . (($noSelection) ? '<font color="red"><b>No Selection Made!</b></font>' : (($sponsorsNight) ? '<i>SPONSOR\'S NIGHT</i>' : '<a href="../groups/view.php?id=' . $group . '">' . $groupName . '</a>')) . '</td>';
+							<td nowrap>' . (($noSelection) ? '<font color="red"><b>No Selection Made!</b></font>' : 
+								(($sponsorsNight) ? '<i>SPONSOR\'S NIGHT</i>' : ($viewLinks ? '<a href="../groups/view.php?id=' . 
+								$group . '">' : ''). $groupName . ($viewLinks ? '</a>' : ''))) . '</td>';
 					if ($viewPeople) {
 						echo '
-								<td nowrap>' . $row['RepName'] . ' ' . $row['RepInitial'] . '</td>
-								<td nowrap>' . $repPhone->getFormatted() . '</td>
-								<td nowrap>' . $row['Rep2Name'] . ' ' . $row['Rep2Initial'] . '</td>
-								<td nowrap>' . $rep2Phone->getFormatted() . '</td>';
+							<td nowrap>' . $row['RepName'] . ' ' . $row['RepInitial'] . '</td>
+							<td nowrap>' . $repPhone->getFormatted() . '</td>
+							<td nowrap>' . $row['Rep2Name'] . ' ' . $row['Rep2Initial'] . '</td>
+							<td nowrap>' . $rep2Phone->getFormatted() . '</td>';
 					}
 					echo '
 							<td nowrap>' . $row['Notes'] . '</td>
