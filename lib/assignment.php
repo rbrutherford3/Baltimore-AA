@@ -278,9 +278,9 @@ class assignment {
 		if ($edit) {
 			// Header HTML (include tables.css)
 			echo '
-				<script type="text/javascript" src="../lib/reload.js"></script>
+				<script type="text/javascript" src="/lib/reload.js"></script>
 				<script type="text/javascript" src="matchCheck.js"></script>
-				<link rel="stylesheet" type="text/css" href="../lib/tables.css">
+				<link rel="stylesheet" type="text/css" href="/lib/tables.css">
 				<title>Institution Committee - View Assignments</title>
 			</head>
 			<body>';
@@ -302,8 +302,8 @@ class assignment {
 		else {
 			// Header HTML
 			echo '
-				<script type="text/javascript" src="../lib/reload.js"></script>
-				<link rel="stylesheet" type="text/css" href="../lib/tables.css">
+				<script type="text/javascript" src="/lib/reload.js"></script>
+				<link rel="stylesheet" type="text/css" href="/lib/tables.css">
 				<title>Institution Committee - Edit Assignments</title>
 			</head>
 			<body>';
