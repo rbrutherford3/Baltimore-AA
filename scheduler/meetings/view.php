@@ -16,7 +16,7 @@ if (isset($_GET['id'])) {
 	$meeting->institution->view();
 	$meeting->cosponsor->view();
 	$meeting->cosponsor2->view();
-	$meeting->outputHTML();
+	$meeting->outputHTML(false);
 }
 
 // Send to "View All" if no meeting found

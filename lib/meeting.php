@@ -215,10 +215,12 @@ class meeting extends data {
 	}
 	
 	// Simple tabular code for displaying a meeting in view.php
-	public function outputHTML() {
+	// "Public" option allows for hiding of private notes and hyperlinks for public view
+	public function outputHTML($public) {
 		// Display HTML
-		include('header.php');
-		echo '
+		if (!$public) {
+			include('header.php');
+			echo '
 		<title>Institution Committee - Meeting ' . $this->displayID->getFormatted() . '</title>
 		</head>
 		<body>
@@ -226,7 +228,9 @@ class meeting extends data {
 			<a class="button" href="../">Home</a>
 			<a class="button" href="viewall.php">Meetings</a>
 			<br>
-			<br>
+			<br>';
+		}
+		echo '
 			<table cellspacing="5">
 				<tr>
 					<td colspan="3">
@@ -268,7 +272,9 @@ class meeting extends data {
 					<td>
 						' . $this->gender->getFormatted() . '
 					</td>
-				</tr>
+				</tr>';
+		if (!$public) {
+			echo '
 				<tr>
 					<td>
 						<b>Active:</b>
@@ -277,7 +283,22 @@ class meeting extends data {
 					<td>
 						' . $this->active->getFormatted() . '
 					</td>
-				</tr>
+				</tr>';
+		}
+		if($public) {
+			echo '
+				<tr>
+					<td>
+						<b>Notes:</b>
+					</td>
+					<td width="20">
+					<td>
+						' . $this->notesPublic->getFormatted() . '
+					</td>
+				</tr>';
+		}
+		else {
+			echo '
 				<tr>
 					<td>
 						<b>Public Notes (printed):</b>
@@ -295,7 +316,9 @@ class meeting extends data {
 					<td>
 						' . $this->notesPrivate->getFormatted() . '
 					</td>
-				</tr>				
+				</tr>;';
+		}
+		echo '
 				<tr>
 					<td colspan="3">
 						&nbsp
@@ -311,8 +334,16 @@ class meeting extends data {
 						<b>Name:</b>
 					</td>
 					<td width="20">
-					<td>
-						<a href="../institutions/view.php?id=' . $this->institution->getID() . '">' . $this->institution->name->getFormatted() . '</a>
+					<td>';
+		if ($public) {
+			echo 
+						$this->institution->name->getFormatted();
+		}
+		else {
+			echo '
+						<a href="../institutions/view.php?id=' . $this->institution->getID() . '">' . $this->institution->name->getFormatted() . '</a>;';
+		}
+		echo '
 					</td>
 				</tr>
 				<tr>
@@ -359,7 +390,21 @@ class meeting extends data {
 					<td>
 						' . $this->institution->active->getFormatted() . '
 					</td>
-				</tr>
+				</tr>;';
+		if ($public) {
+			echo '
+				<tr>
+					<td>
+						<b>Notes:</b>
+					</td>
+					<td width="20">
+					<td>
+						' . $this->institution->notesPublic->getFormatted() . '
+					</td>
+				</tr>';
+		}
+		else {
+			echo '
 				<tr>
 					<td>
 						<b>Public Notes (printed):</b>
@@ -377,7 +422,9 @@ class meeting extends data {
 					<td>
 						' . $this->institution->notesPrivate->getFormatted() . '
 					</td>
-				</tr>					
+				</tr>';
+		}
+		echo '
 				<tr>
 					<td colspan="3">
 						&nbsp
@@ -393,8 +440,15 @@ class meeting extends data {
 						<b>Name:</b>
 					</td>
 					<td width="20">
-					<td>
-						<a href="../people/view.php?id=' . $this->sponsor->getID() . '">' . $this->sponsor->getName()->getFormatted() . $this->sponsor->getInitial()->getFormatted() . '</a>
+					<td>';
+		if ($public) {
+					echo $this->sponsor->getName()->getFormatted();
+		}
+		else {
+			echo '
+						<a href="../people/view.php?id=' . $this->sponsor->getID() . '">' . $this->sponsor->getName()->getFormatted() . $this->sponsor->getInitial()->getFormatted() . '</a>';
+		}
+		echo '
 					</td>
 				</tr>
 				<tr>
@@ -405,7 +459,9 @@ class meeting extends data {
 					<td>
 						' . $this->sponsor->getPhone()->getFormatted() . '
 					</td>
-				</tr>
+				</tr>';
+		if (!$public) {
+			echo '
 				<tr>
 					<td>
 						<b>Notes:</b>
@@ -414,7 +470,9 @@ class meeting extends data {
 					<td>
 						' . $this->sponsor->getNotes()->getFormatted() . '
 					</td>
-				</tr>
+				</tr>';
+		}
+		echo '
 				<tr>
 					<td colspan="3">
 						&nbsp
@@ -422,7 +480,7 @@ class meeting extends data {
 				</tr>';
 		// only display if rep is present:
 		if (is_null($this->cosponsor->id)) {
-		echo '
+			echo '
 				<tr>
 					<td colspan="3">
 						<h2>Needs Co-Sponsor</h2>
@@ -430,7 +488,7 @@ class meeting extends data {
 				</tr>';
 		}
 		else {
-		echo '
+			echo '
 				<tr>
 					<td colspan="3">
 						<h2>Co-Sponsor:</h2>
@@ -440,8 +498,16 @@ class meeting extends data {
 						<b>Name:</b>
 					</td>
 					<td width="20">
-					<td>
-						<a href="../people/view.php?id=' . $this->cosponsor->getID() . '">' . $this->cosponsor->getName()->getFormatted() . $this->cosponsor->getInitial()->getFormatted() . '</a>
+					<td>';
+			if ($public) {
+				echo
+					$this->cosponsor->getName()->getFormatted();
+			}
+			else {
+				echo '
+					<a href="../people/view.php?id=' . $this->cosponsor->getID() . '">' . $this->cosponsor->getName()->getFormatted() . $this->cosponsor->getInitial()->getFormatted() . '</a>';
+			}
+			echo '
 					</td>
 				</tr>
 				<tr>
@@ -452,7 +518,9 @@ class meeting extends data {
 					<td>
 						' . $this->cosponsor->getPhone()->getFormatted() . '
 					</td>
-				</tr>
+				</tr>';
+			if (!$public) {
+				echo '
 				<tr>
 					<td>
 						<b>Notes:</b>
@@ -461,14 +529,14 @@ class meeting extends data {
 					<td>
 						' . $this->cosponsor->getNotes()->getFormatted() . '
 					</td>
-				</tr>';				
-				
+				</tr>';
+			}
 		}
 		// Second rep display
 
 		// only display if rep is present:
 		if (!is_null($this->cosponsor2->id)) {
-		echo '
+			echo '
 					<tr>
 					<td colspan="3">
 						&nbsp
@@ -483,8 +551,16 @@ class meeting extends data {
 						<b>Name:</b>
 					</td>
 					<td width="20">
-					<td>
-						<a href="../people/view.php?id=' . $this->cosponsor2->getID() . '">' . $this->cosponsor2->getName()->getFormatted() . $this->cosponsor2->getInitial()->getFormatted() . '</a>
+					<td>';
+			if ($public) {
+				echo
+					$this->cosponsor2->getName()->getFormatted();
+			}
+			else {
+				echo '
+					<a href="../people/view.php?id=' . $this->cosponsor2->getID() . '">' . $this->cosponsor2->getName()->getFormatted() . $this->cosponsor2->getInitial()->getFormatted() . '</a>';	
+			}
+			echo '
 					</td>
 				</tr>
 				<tr>
@@ -495,26 +571,32 @@ class meeting extends data {
 					<td>
 						' . $this->cosponsor2->getPhone()->getFormatted() . '
 					</td>
-				</tr>
+				</tr>';
+			if (!$public) {
+				echo '
 				<tr>
 					<td>
 						<b>Notes:</b>
 					</td>
 					<td width="20">
 					<td>
-						' . $this->cosponsor2->getNotes()->getFormatted() . '
+						' . $this->sponsor->getNotes()->getFormatted() . '
 					</td>
 				</tr>';
+			}
 		}
 				// Display navigation buttons at end
 		echo '
-			</table>
+			</table>';
+		if (!$public) {
+			echo '
 			<br>
 			<a class="button" href="form.php?id=' . $this->id . '">Edit</a>
 			<a class="button" href="form.php">Add New</a>
 			<a class="button" href="../assignments/viewall.php?meeting=' . $this->id . '">Assignments</a>
 		</body>
 		</html>';
+		}
 	}
 	
 	// Function to display outputs if using viewall.php in a table
