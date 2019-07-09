@@ -10,7 +10,6 @@ include_once '../../lib/dbconnect.php';
 include_once '../../lib/meeting.php';
 include_once '../../lib/header.php';
 
-
 // Form string variables (employing array method for form elements)
 $formName = 'form';
 $meetingBase = 'meeting';
@@ -80,93 +79,89 @@ $meeting->cosponsor->viewAll();
 $meeting->cosponsor2->view();
 $meeting->cosponsor2->viewAll();
 
+// Check for the existence of co-sponsor and second co-sponsor
+$cosponsorExists = !is_null($meeting->cosponsor->getID());
+$cosponsor2Exists = !is_null($meeting->cosponsor2->getID());
+
+// Determine div and button visibility states of each based on their existence
+if(!$cosponsorExists) {
+	$toggleState1 = 1;
+	$toggleState2 = 0;
+}
+elseif($cosponsorExists && !$cosponsor2Exists) {
+	$toggleState1 = 2;
+	$toddleState2 = 1;
+}
+elseif($cosponsorExists && $cosponsor2Exists) {
+	$toggleState1 = 3;
+	$toggleState2 = 2;
+}
+
 // Draw divs using bootstrap columns and rows as containers
-echo '<div class="row">';
-echo '<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
-echo '<p>';
-echo '<a class="button" href = "../" style="margin-top: 10px;">Home</a>';
-echo '<a class="button" href = "viewall.php">Meetings</a>';
-echo '</p>';
-echo '</div>';
-echo '<div class="col-lg-9 col-md-8" style="text-align: center;">';	
-echo '</div>';
-echo '</div>';
-echo '<div class="row">';
-echo '<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
-$meeting->inputHTML($meetingBase, $meetingBase, true);
-echo '</div>';
-echo '<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
-$meeting->institution->inputHTML('institution', 'institution', true);
-echo '</div>';
-echo '<div class="col-lg-6 col-md-4" style="text-align: center;">';
-echo '</div>';
-echo '</div>';
-echo '<div class="row">';
-echo '<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
-$meeting->sponsor->inputHTML($sponsorBase, $sponsorBase, true, 'Sponsor');
-echo '</div>';
-echo '<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
-$meeting->cosponsor->inputHTML($cosponsorBase, $cosponsorBase, true, 'Co-Sponsor');
-echo '</div>';
-// Only show second cosponsor div if there is a cosponsor, otherwise hide.  Draw add/hide buttons appropriately.
-if(is_null($meeting->cosponsor2->getID())) {
-	echo '<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
-	$meeting->cosponsor2->inputHTML($cosponsor2Base, $cosponsor2Base, false, 'Co-Sponsor #2');
-	echo '</div>';
-	echo '<div class="col-lg-3 col-md-4" style="text-align: center;">';
-	echo '</div>';
-	echo '</div>';
-	echo '<div class="row">';
-	echo '<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
-	echo '<p>';
-	echo '<input type="submit" value="Submit">';
-	echo '</p>';
-	echo '</div>';
-	echo '<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
-	echo '<p>';
-	$meeting->cosponsor->toggleButton($cosponsorBase, $cosponsorBase, true, 'cosponsor');
-	echo '</p>';
-	echo '</div>';
-	echo '<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
-	echo '<p>';
-	$meeting->cosponsor2->toggleButton($cosponsor2Base, $cosponsor2Base, false, 'second cosponsor');
-	echo '</p>';
-	echo '</div>';	
-	echo '<div class="col-lg-3" style="text-align: center;">';	
-	echo '</div>';
-	echo '</div>';
-}
-else {
-	echo '<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
-	$meeting->cosponsor2->inputHTML($cosponsor2Base, $cosponsor2Base, true, 'Co-Sponsor #2');
-	echo '</div>';
-	echo '<div class="col-lg-3 col-md-4" style="text-align: center;">';
-	echo '</div>';
-	echo '</div>';
-	echo '<div class="row">';
-	echo '<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
-	echo '<p>';
-	echo '<input type="submit" value="Submit">';
-	echo '</p>';
-	echo '</div>';
-	echo '<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
-	echo '<p>';
-	$meeting->cosponsor->toggleButton($cosponsorBase, $cosponsorBase, true, 'cosponsor');
-	echo '</p>';
-	echo '</div>';
-	echo '<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
-	echo '<p>';
-	$meeting->cosponsor2->toggleButton($cosponsor2Base, $cosponsor2Base, true, 'second cosponsor');
-	echo '</p>';
-	echo '</div>';	
-	echo '<div class="col-lg-3" style="text-align: center;">';	
-	echo '</div>';
-	echo '</div>';
-}
-
-
 echo '
+	<div class="row">
+		<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">
+			<p>
+				<a class="button" href = "../" style="margin-top: 10px;">Home</a>
+				<a class="button" href = "viewall.php">Meetings</a>
+			</p>
+		</div>
+		<div class="col-lg-9 col-md-8" style="text-align: center;">	
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
+			$meeting->inputHTML($meetingBase, $meetingBase, true);
+echo '
+		</div>
+		<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
+			$meeting->institution->inputHTML('institution', 'institution', true);
+echo '
+		</div>
+		<div class="col-lg-6 col-md-4" style="text-align: center;">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
+			$meeting->sponsor->inputHTML($sponsorBase, $sponsorBase, true, 'Sponsor');
+echo '
+		</div>
+		<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
+			$meeting->cosponsor->inputHTML($cosponsorBase, $cosponsorBase, $cosponsorExists, 'Co-Sponsor');
+echo '
+		</div>
+		<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
+			$meeting->cosponsor2->inputHTML($cosponsor2Base, $cosponsor2Base, $cosponsor2Exists, 'Co-Sponsor #2');
+echo '
+		</div>
+		<div class="col-lg-3 col-md-4" style="text-align: center;">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">
+			<p>
+				<input type="submit" value="Submit">
+			</p>
+		</div>
+		<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">
+			<p>';
+				$meeting->cosponsor->toggleButton($cosponsorBase, $cosponsorBase, $toggleState1, 'cosponsor');
+echo '
+			</p>
+		</div>
+		<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">
+			<p>';
+				$meeting->cosponsor2->toggleButton($cosponsor2Base, $cosponsor2Base, $toggleState2, 'second cosponsor');
+echo '
+			</p>
+		</div>
+		<div class="col-lg-3" style="text-align: center;">
+		</div>
+	</div>
 </div>
+<script>
+secondbuttons("' . $cosponsorBase . '", "' . $cosponsor2Base. '");
+</script>
 </form>
 </body>
 </html>';

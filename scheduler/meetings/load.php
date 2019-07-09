@@ -24,7 +24,7 @@ $institutionID = loadInstitution($db, $institutionBase);
 // Get ID based on input method for sponsor and cosponsor
 $sponsorID = loadPerson($db, $sponsorBase);
 
-// Do the same for second cosponsor if it exists
+// Do the same for cosponsor if it exists
 if ($_POST[$cosponsorBase]['exists']) {
 	$cosponsorID = loadPerson($db, $cosponsorBase);
 }

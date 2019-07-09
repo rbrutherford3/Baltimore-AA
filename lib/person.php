@@ -304,26 +304,43 @@ class person extends data {
 	}
 	
 	// In some rare cases, there is a second group rep or meeting co-sponsor.  Add a button to add or delete them
-	public function toggleButton($idBase, $nameBase, $exists, $type) {
+	public function toggleButton($idBase, $nameBase, $state, $type) {
 		// Set initial values based on whether there's an existing second rep or second co-sponsor
-		if($exists) {	
-			$addHidden = ' style="display: none"';
-			$deleteHidden = '';
-			$secondValue = '1';
+		
+		// Select initial state of button (add/remove/none)
+		switch ($state) {
+			case 0: 	// This person does not exist and is the second person: no buttons
+				$showHidden = ' style="display: none"';
+				$hideHidden = ' style="display: none"';
+				$exists = '0';
+				break;
+			case 1:		// This person does not initially exist and is NOT the second person: need "add" button
+				$showHidden = '';
+				$hideHidden = ' style="display: none"';
+				$exists = '0';
+				break;
+			case 2:		// This person does initially exist and there is no second version of the person, need "remove" button
+						// Or: this person does initially exist and is the second version of the person
+				$showHidden = ' style="display: none"';
+				$hideHidden = '';
+				$exists = '1';
+				break;
+			case 3:		// This person does initially exist and there is a second version of the person, show nothing
+				$showHidden = ' style="display: none"';
+				$hideHidden = ' style="display: none"';
+				$exists = '1';
+				break;
 		}
-		else {
-			$addHidden = '';
-			$deleteHidden = ' style="display: none"';
-			$secondValue = '0';
-		}
-		 // Use two different buttons: "add" and "delete" and hide or show them accordingly (handled by radiobuttons.js)
+		
+		 // Use two different buttons: "add" and "delete" and hide or show them accordingly (handled by secondbuttons.js)
 		echo '
-					<input type="hidden" id="' . $idBase . '[exists]" name="' . $nameBase . '[exists]" value="' . $secondValue . '">
-					<button id="' . $idBase . '[addSecond]" name="' . $nameBase . '[addSecond]" type="button" ' . $addHidden . '>Add ' . $type . '</button>
-					<button id="' . $idBase . '[deleteSecond]" name="' . $nameBase . '[deleteSecond]" type="button" ' . $deleteHidden . '>Remove ' . $type . '</button>
+				<input type="hidden" id="' . $idBase . '[exists]" name="' . $nameBase . '[exists]" value="' . $exists . '">
+				<button id="' . $idBase . '[show]" name="' . $nameBase . '[show]" type="button"' . $showHidden . '>Add ' . $type . '</button>
+				<button id="' . $idBase . '[hide]" name="' . $nameBase . '[hide]" type="button"' . $hideHidden . '>Remove ' . $type . '</button>';
+/* 		echo '  // this function was moved to the form.php files to be more versatile
 					<script>
 					secondbuttons("' . $idBase . '");
-					</script>';
+					</script>'; */
 	}
 	
 	// Simple tabular code for displaying a person in view.php
