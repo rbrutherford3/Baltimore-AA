@@ -587,10 +587,10 @@ class meeting extends data {
 		}
 				// Display navigation buttons at end
 		echo '
-			</table>';
+			</table>
+			<br>';
 		if (!$public) {
 			echo '
-			<br>
 			<a class="button" href="form.php?id=' . $this->id . '">Edit</a>
 			<a class="button" href="form.php">Add New</a>
 			<a class="button" href="../assignments/viewall.php?meeting=' . $this->id . '">Assignments</a>

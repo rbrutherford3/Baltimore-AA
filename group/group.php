@@ -84,6 +84,7 @@ if ($month > 0) {
 
 // Output meeting information for each assignment that month (hopefully only one)
 if ($numRows > 0) {
+	echo '<hr>';
 	foreach($rows as $row) {
 		$dateAssignment = new DateTime($row["Date"]);
 		echo '<h1>' . $dateAssignment->format('F j, Y') . '</h1>';
@@ -98,6 +99,7 @@ if ($numRows > 0) {
 	
 	// Button navigation buttons
 	echo '
+<hr>
 <br>
 <a class="button" href="group.php?id=' . $id . '&month=' . $prevMonth . '">Previous Month</a>
 <a class="button" href="index.php">Groups</a>';

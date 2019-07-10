@@ -27,7 +27,7 @@ echo '
 
 // List all groups and links to view their most recent assignments
 foreach($rows as $row) {
-	echo '<a href="group.php?id=' . $row["ID"] . '">' . $row["Name"] . '</a><br>';
+	echo '<p><a href="group.php?id=' . $row["ID"] . '">' . $row["Name"] . '</a></p>';
 }
 
 echo '
