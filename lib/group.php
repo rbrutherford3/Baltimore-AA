@@ -192,18 +192,21 @@ class group extends data {
 	}
 	
 	// Simple tabular code for displaying a group in view.php
-	public function outputHTML() {
+	public function outputHTML($public) {
 		// Display HTML
-		include('header.php');
+		if (!$public) {
+			include('header.php');
+			echo '
+			<title>Institution Committee - "' . $this->name->getFormatted() . '" Group</title>
+			</head>
+			<body>
+				<h1>Group Viewer</h1>
+				<p>
+				<a class="button" href="../">Home</a>
+				<a class="button" href="viewall.php">Groups</a>
+				</p>';
+		}
 		echo '
-		<title>Institution Committee - "' . $this->name->getFormatted() . '" Group</title>
-		</head>
-		<body>
-			<h1>Group Viewer</h1>
-			<p>
-			<a class="button" href="../">Home</a>
-			<a class="button" href="viewall.php">Groups</a>
-			</p>
 			<table cellspacing="5">
 				<tr>
 					<td colspan="3">
@@ -245,7 +248,9 @@ class group extends data {
 					<td>
 						' . $this->bg->getFormatted() . '
 					</td>
-				</tr>
+				</tr>';
+		if (!$public) {
+			echo '
 				<tr>
 					<td>
 						<b>Active:</b>
@@ -263,7 +268,7 @@ class group extends data {
 					<td>
 						' . $this->probation->getFormatted() . '
 					</td>
-				</tr>				
+				</tr>
 				<tr>
 					<td>
 						<b>Notes:</b>
@@ -272,7 +277,9 @@ class group extends data {
 					<td>
 						' . $this->notes->getFormatted() . '
 					</td>
-				</tr>
+				</tr>';
+		}
+		echo '
 				<tr>
 					<td colspan="3">
 						&nbsp
@@ -288,8 +295,16 @@ class group extends data {
 						<b>Name:</b>
 					</td>
 					<td width="20">
-					<td>
-						<a href="../people/view.php?id=' . $this->rep->getID() . '">' . $this->rep->getName()->getFormatted() . $this->rep->getInitial()->getFormatted() . '</a>
+					<td>';
+		if ($public) {
+			echo
+						$this->rep->getName()->getFormatted() . $this->rep->getInitial()->getFormatted();
+		}
+		else {
+			echo '
+						<a href="../people/view.php?id=' . $this->rep->getID() . '">' . $this->rep->getName()->getFormatted() . $this->rep->getInitial()->getFormatted() . '</a>;';
+		}
+		echo '
 					</td>
 				</tr>
 				<tr>
@@ -300,7 +315,9 @@ class group extends data {
 					<td>
 						' . $this->rep->getPhone()->getFormatted() . '
 					</td>
-				</tr>
+				</tr>';
+		if (!$public) {
+			echo '
 				<tr>
 					<td>
 						<b>Notes:</b>
@@ -310,6 +327,7 @@ class group extends data {
 						' . $this->rep->getNotes()->getFormatted() . '
 					</td>
 				</tr>';
+		}
 				
 		// Second rep display
 
@@ -331,8 +349,16 @@ class group extends data {
 						<b>Name:</b>
 					</td>
 					<td width="20">
-					<td>
-						<a href="../people/view.php?id=' . $this->rep2->getID() . '">' . $this->rep2->getName()->getFormatted() . $this->rep2->getInitial()->getFormatted() . '</a>
+					<td>';
+			if ($public) {
+				echo
+						$this->rep2->getName()->getFormatted() . $this->rep2->getInitial()->getFormatted();
+			}
+			else {
+				echo '
+						<a href="../people/view.php?id=' . $this->rep2->getID() . '">' . $this->rep2->getName()->getFormatted() . $this->rep2->getInitial()->getFormatted() . '</a>';
+			}
+			echo '
 					</td>
 				</tr>
 				<tr>
@@ -343,7 +369,9 @@ class group extends data {
 					<td>
 						' . $this->rep2->getPhone()->getFormatted() . '
 					</td>
-				</tr>
+				</tr>';
+			if (!$public) {
+				echo '
 				<tr>
 					<td>
 						<b>Notes:</b>
@@ -353,16 +381,20 @@ class group extends data {
 						' . $this->rep2->getNotes()->getFormatted() . '
 					</td>
 				</tr>';
+			}
 		}
 				// Display navigation buttons at end
 		echo '
 			</table>
-			<br>
+			<br>';
+		if (!$public) {
+			echo '
 			<a class="button" href="form.php?id=' . $this->id . '">Edit</a>
 			<a class="button" href="form.php">Add New</a>
 			<a class="button" href="../assignments/viewall.php?group=' . $this->id . '">Assignments</a>	
 		</body>
 		</html>';
+		}
 	}
 	
 	// Function to display outputs if using viewall.php in a table
