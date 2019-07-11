@@ -51,7 +51,8 @@ FROM assignments a
 LEFT JOIN meetings m ON m.`ID`=a.`Meeting` 
 WHERE a.`Group`=:group 
 AND MONTH(a.`Date`)=:month 
-AND YEAR(a.`Date`)=:year";
+AND YEAR(a.`Date`)=:year 
+ORDER BY a.`Date` ASC";
 $stmtAssignments = $db->prepare($sqlAssignments);
 $stmtAssignments->bindValue(":group", $id, PDO::PARAM_INT);
 $stmtAssignments->bindValue(":month", $monthQ, PDO::PARAM_INT);
