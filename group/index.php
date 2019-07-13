@@ -23,7 +23,13 @@ echo '
 	<title>Baltimore AA Institution Committee Schedule</title>
 </head>
 <body>
-<h1>Please select your home group</h1>';
+<h1>Please select your home group</h1>
+<a class="button" href="../index.html">
+Home
+</a>
+<h2>
+Groups
+</h2>';
 
 // List all groups and links to view their most recent assignments
 foreach($rows as $row) {
