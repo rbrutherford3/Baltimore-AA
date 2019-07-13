@@ -14,7 +14,7 @@ if (isset($_GET['id'])) {
 	$group->view();
 	$group->rep->view();
 	$group->rep2->view();
-	$group->outputHTML();
+	$group->outputHTML(false);
 }
 
 // Send to "View All" if no group found
