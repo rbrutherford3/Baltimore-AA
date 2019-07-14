@@ -18,7 +18,7 @@ if ($dummyDB) {
 
 //put table names you want backed up in this array.
 //leave empty to do all
-tables = array();
+$tables = array();
 $sqlDump = backup_tables($db, $tables);
 if ($dummyDB) {
 	mirrorDB($db2, $sqlDump);
