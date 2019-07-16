@@ -14,9 +14,9 @@ include_once '../../lib/header.php';
 $formName = 'form';
 $meetingBase = 'meeting';
 $institutionBase = 'institution';
-$sponsorBase = 'sponsor';
-$cosponsorBase = 'cosponsor';
-$cosponsor2Base = 'cosponsor2';
+$sponsorBase = 'spons';
+$cosponsorBase = 'cospons';
+$cosponsor2Base = 'cospons2';
 
 // Edit meeting if ID provided
 if(isset($_GET['id'])) {
@@ -90,7 +90,7 @@ if(!$cosponsorExists) {
 }
 elseif($cosponsorExists && !$cosponsor2Exists) {
 	$toggleState1 = 2;
-	$toddleState2 = 1;
+	$toggleState2 = 1;
 }
 elseif($cosponsorExists && $cosponsor2Exists) {
 	$toggleState1 = 3;
