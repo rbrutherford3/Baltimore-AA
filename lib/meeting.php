@@ -316,7 +316,7 @@ class meeting extends data {
 					<td>
 						' . $this->notesPrivate->getFormatted() . '
 					</td>
-				</tr>;';
+				</tr>';
 		}
 		echo '
 				<tr>
@@ -341,7 +341,7 @@ class meeting extends data {
 		}
 		else {
 			echo '
-						<a href="../institutions/view.php?id=' . $this->institution->getID() . '">' . $this->institution->name->getFormatted() . '</a>;';
+						<a href="../institutions/view.php?id=' . $this->institution->getID() . '">' . $this->institution->name->getFormatted() . '</a>';
 		}
 		echo '
 					</td>
@@ -390,7 +390,7 @@ class meeting extends data {
 					<td>
 						' . $this->institution->active->getFormatted() . '
 					</td>
-				</tr>;';
+				</tr>';
 		if ($public) {
 			echo '
 				<tr>

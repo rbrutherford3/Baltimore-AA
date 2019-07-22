@@ -14,9 +14,9 @@ include_once '../../lib/loadinstitution.php';
 $formName = 'form';
 $meetingBase = 'meeting';
 $institutionBase = 'institution';
-$sponsorBase = 'sponsor';
-$cosponsorBase = 'cosponsor';
-$cosponsor2Base = 'cosponsor2';
+$sponsorBase = 'spons';
+$cosponsorBase = 'cospons';
+$cosponsor2Base = 'cospons2';
 
 // Get ID based on input method for institution
 $institutionID = loadInstitution($db, $institutionBase);
