@@ -1,2 +1,3 @@
 lib/dbconnect*.php
 .git-ftp-ignore
+*.sql
