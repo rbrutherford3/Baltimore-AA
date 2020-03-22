@@ -19,7 +19,7 @@ if (isset($_POST[$personBase]['id'])) {	// Update db if editing
 	$person = new person($db, $_POST[$personBase]['name'], $_POST[$personBase]['initial'], 
 		$_POST[$personBase]['phone']['1'], $_POST[$personBase]['phone']['2'], $_POST[$personBase]['phone']['3'], 
 		$_POST[$personBase]['notes'], isset($_POST[$personBase]['active']), $_POST[$personBase]['id']);
-	
+
 	// Check to see that information isn't conflicting with another record
 	if ($person->checkExistsExcluding()) {
 		echo '
@@ -29,7 +29,7 @@ if (isset($_POST[$personBase]['id'])) {	// Update db if editing
 			window.location = "form.php?id=' . $person->getID() . '";
 			</script>';
 	}
-	
+
 	// Update otherwise
 	else {
 		$person->update();	// (add handling for false results?)
@@ -41,7 +41,7 @@ else { // Insert into db if adding
 	$person = new person($db, $_POST[$personBase]['name'], $_POST[$personBase]['initial'], 
 		$_POST[$personBase]['phone']['1'], $_POST[$personBase]['phone']['2'], $_POST[$personBase]['phone']['3'], 
 		$_POST[$personBase]['notes'], isset($_POST[$personBase]['active']));
-		
+
 	// Check to see that information isn't already in db
 	if ($person->checkExists()) {
 		echo '

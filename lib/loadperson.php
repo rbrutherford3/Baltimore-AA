@@ -42,7 +42,7 @@ function loadPerson($db, $nameBase) {
 		}
 		return $person->getID();	// Return the ID for insertion into group or institution object
 	}
-	else if ($option == 3) {	// If selecting a person from the pulldown menu	
+	else if ($option == 3) {	// If selecting a person from the pulldown menu
 		return $_POST[$nameBase]['pulldown'];	// Simply return the ID!
 	}
 	else {

@@ -100,7 +100,7 @@ if ($numRows > 0) {
 			$group->outputHTML(true);
 		}
 	}
-	
+
 	// Button navigation buttons
 	echo '
 <hr>

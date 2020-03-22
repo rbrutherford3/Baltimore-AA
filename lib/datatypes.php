@@ -19,14 +19,14 @@ class active extends flag implements HTML {
 	protected $trueFormatted = 'Active';
 	protected $falseFormatted = 'Inactive';
 	protected $className = 'active';
-	
+
 	// Basic label
 	public function labelHTML($idBase, $label) {
 		echo '
 					<label for="' . $idBase . '[active]">' . $label . '</label>';
 
 	}
-	
+
 	// Checkbox HTML with default checked or unchecked
 	public function inputHTML($idBase, $nameBase, $enabled) {
 		if ($enabled) {
@@ -52,14 +52,14 @@ class probation extends flag implements HTML {
 	protected $trueFormatted = 'On Probation';
 	protected $falseFormatted = 'Not On Probation';
 	protected $className = 'probation';
-	
+
 	// Basic label
 	public function labelHTML($idBase, $label) {
 		echo '
 					<label for="' . $idBase . '[probation]">' . $label . '</label>';
 
 	}
-	
+
 	// Checkbox HTML with default checked or unchecked
 	public function inputHTML($idBase, $nameBase, $enabled) {
 		if ($enabled) {
@@ -84,7 +84,7 @@ In institution class, true means they require background checks. */
 class bg extends flag implements HTML {
 	protected $defaultValue = true;
 	protected $className = 'bg';
-	
+
 	public function labelHTML($idBase, $label) {
 		echo '
 					<label for="' . $idBase . '[bg]">' . $label . '</label>';
@@ -107,7 +107,7 @@ class bg extends flag implements HTML {
 		}
 		echo '
 					<input type="checkbox" id="' . $idBase . '[bg]" name="' . $nameBase . '[bg]"' . $enabledTag . $checkedTag . ' />';
-	}	
+	}
 }
 
 /* dow class is a complex class.  This class stores the days of the week for both groups and 
@@ -116,25 +116,25 @@ I decided to go with bitmasking (https://en.wikipedia.org/wiki/Bitwise_operation
 days of the week in 7 bits.  The 0th bit is sunday, the 1st is Monday, etc., up to the 6th bit (Saturday).  
 This proved to be very successful, as the operations are very simple. */
 class dow extends number implements dowHTML {
-	
+
 	private $dows = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 
 	function __construct() {
-		
+
 		// No days of the week if nothing passed
 		if (func_num_args() == 0) {
 			$this->value = 0;
 			$this->decode();
 			$this->format();
 		}
-		
+
 		// If passing in a coded number...
 		else if (func_num_args() == 1) {
 			$this->value = func_get_arg(0);
 			$this->decode();
 			$this->format();
 		}
-		
+
 		// If passing in uncoded true/falses
 		else if (func_num_args() == 7) {
 			$this->dow = array(func_get_arg(0), func_get_arg(1), func_get_arg(2), func_get_arg(3), 
@@ -157,7 +157,7 @@ class dow extends number implements dowHTML {
 			}
 		}
 	}
-	
+
 	// Reverse the encoding process through bitmasking
 	// Example: 01000100 (saturday and tuesday) & 01000000 (saturday) = 01000000 (true, saturday is present)
 	// Example #2: 00100001 (friday and sunday) $ 01000000 (saturday) = 00000000 (false, saturday is NOT present)
@@ -172,7 +172,7 @@ class dow extends number implements dowHTML {
 			}
 		}
 	}
-	
+
 	// Yields formatted string (i.e.: 'Monday, Tuesday' or 'Saturday')
 	protected function format() {
 		// Format days of week
@@ -203,37 +203,37 @@ class dow extends number implements dowHTML {
 			}
 		}
 	}
-	
+
 	// Assumes 0-6 for days of week, returns string
 	public function getString($i) {
 		return $this->dows[$i];
 	}
-	
+
 	// Assumes 0-6 for days of week, returns binary equivelant
 	public function getNumber($i) {
 		return pow(2, $i);
 	}
-	
+
 	// Get a boolean value for a particular day of the week
 	public function getBoolean($i) {
 		return pow(2, $i) & $this->value;
 	}
-	
+
 	public function getValue() {
 		return $this->value;
 	}
-	
-	// Returns formatted string from format() function	
+
+	// Returns formatted string from format() function
 	public function getFormatted() {
 		return $this->formatted;
 	}
-	
+
 	public function labelHTMLpulldown($idBase, $label) {
 		echo '
 					<label for="' . $idBase . '[dow]">' . $label . '</label>';
 
 	}
-	
+
 	// Pulldown menu HTML
 	public function inputHTMLpulldown($idBase, $nameBase, $enabled) {
 		if ($enabled) {
@@ -262,7 +262,7 @@ class dow extends number implements dowHTML {
 		echo '
 					</select>';
 	}
-	
+
 	// Checkbox HTML (outputs seven check boxes for each day of the week)
 	public function inputHTMLcheckbox($idBase, $nameBase, $enabled) {
 		if ($enabled) {
@@ -290,11 +290,11 @@ not much more to say about it */
 class gender extends number implements HTML {
 	protected $defaultValue = 0;
 	protected $className = 'gender';
-	
+
 	protected function format() {
 		$this-> formatted = $this->getString($this->value);
 	}
-	
+
 	// Format on constructor
 	public static function getString($i) {
 		switch($i) {
@@ -312,7 +312,7 @@ class gender extends number implements HTML {
 			break;
 		}
 	}
-	
+
 	// Label HTML
 	public function labelHTML($idBase, $label) {
 		echo '
@@ -328,7 +328,7 @@ class gender extends number implements HTML {
 			$enabledTag = ' disabled';
 		}
 		echo '
-					<select id="' . $idBase . '[gender]" name="' . $nameBase . '[gender]"' . $enabledTag . '>';			
+					<select id="' . $idBase . '[gender]" name="' . $nameBase . '[gender]"' . $enabledTag . '>';
 		for ($i=0; $i<3; $i++) {
 			if ($i == $this->getValue()) {
 				$selectedTag = ' selected';
@@ -348,7 +348,7 @@ class gender extends number implements HTML {
 // Initial functions just like name, except the input has a max length of 1
 class initial extends text implements HTML {
 	protected $className = 'initial';
-	
+
 	protected function format() {
 		if (empty($this->value) || is_null($this->value)) {	// nullify if empty string, keep formatted null, too (modify to empty string!?)
 			$this->value = null;
@@ -358,13 +358,13 @@ class initial extends text implements HTML {
 			$this->formatted = ' ' . htmlspecialchars($this->value) . '.';
 		}
 	}
-	
+
 	// Labl HTML
 	public function labelHTML($idBase, $label) {
 		echo '
 					<label for="' . $idBase . '[initial]">' . $label . '</label>';
 	}
-	
+
 	// Input HTML with a maxlength of 1
 	public function inputHTML($idBase, $nameBase, $enabled) {
 		if ($enabled) {
@@ -372,7 +372,7 @@ class initial extends text implements HTML {
 		}
 		else {
 			$enabledTag = ' disabled';
-		}	
+		}
 		echo '
 					<input class="initial" type="text" id="' . $idBase . '[initial]" name="' . $nameBase . 
 						'[initial]" value="' . $this->getValue() . '"' . $enabledTag . ' maxlength="1" />';
@@ -382,19 +382,19 @@ class initial extends text implements HTML {
 // Name class is a simple string input class.  The only thing beyond the text class is the HTML functions
 class name extends text implements HTML {
 	protected $className = 'name';
-	
+
 	public function labelHTML($idBase, $label) {
 		echo '
 					<label for="' . $idBase . '[name]">' . $label . '</label>';
 	}
-	
+
 	public function inputHTML($idBase, $nameBase, $enabled) {
 		if ($enabled) {
 			$enabledTag = '';
 		}
 		else {
 			$enabledTag = ' disabled';
-		}		
+		}
 		echo '
 					<input class="name" type="text" id="' . $idBase . '[name]" name="' . $nameBase . 
 						'[name]" value="' . $this->getValue() . '"' . $enabledTag . ' maxlength="128" required/>';
@@ -409,18 +409,18 @@ class notes extends text implements HTML {
 		echo '
 					<label for="' . $idBase . '[notes]">' . $label . '</label>';
 	}
-	
+
 	public function inputHTML($idBase, $nameBase, $enabled) {
 		if ($enabled) {
 			$enabledTag = '';
 		}
 		else {
 			$enabledTag = ' disabled';
-		}		
+		}
 		echo '
 					<textarea class="notes" id="' . $idBase . '[notes]" name="' . $nameBase . '[notes]"' . 
 						' maxlength="255" rows="4"' . $enabledTag . '>' . $this->getValue() . '</textarea>';
-	}	
+	}
 }
 
 // Notes public is to differentiate it from private notes for the meeting in the HTML form.  I wish I could have used the same
@@ -432,24 +432,24 @@ class notesPublic extends text implements HTML {
 		echo '
 					<label for="' . $idBase . '[notesPublic]">' . $label . '</label>';
 	}
-	
+
 	public function inputHTML($idBase, $nameBase, $enabled) {
 		if ($enabled) {
 			$enabledTag = '';
 		}
 		else {
 			$enabledTag = ' disabled';
-		}		
+		}
 		echo '
 					<textarea class="notes" id="' . $idBase . '[notesPublic]" name="' . $nameBase . '[notesPublic]"' . $enabledTag . 
 						' maxlength="255" rows="4">' . $this->getValue() . '</textarea>';
-	}	
+	}
 }
 
 /* The phone class and the 10-digit number phone number and the three numbers that comprise it.
 Note that they are all text numbers because they do not have any real computational value */
 class phone extends text implements HTML {
-	
+
 	// Accepts ten-digit string or three 3/4 digit strings
 	function __construct() {		// If no arguments, start with empty strings
 		if (func_num_args() == 0) {
@@ -473,21 +473,21 @@ class phone extends text implements HTML {
 		}
 		else {
 			die('Invalid number of arguments for phone class!');
-		}		
+		}
 	}
-	
+
 	// Convert three string phone number to one string
 	private function phone3to1() {
 		$this->phone = new text($this->phone1->getValue() . $this->phone2->getValue() . $this->phone3->getValue());
 	}
-	
+
 	// Convert one string phone number to three strings;
 	private function phone1to3() {
 		$this->phone1 = new text(substr($this->phone->getValue(), 0, 3));
 		$this->phone2 = new text(substr($this->phone->getValue(), 3, 3));
 		$this->phone3 = new text(substr($this->phone->getValue(), 6, 4));
 	}
-	
+
 	// Format number as (XXX) XXX-XXXX
 	protected function format() {
 		if (is_numeric($this->phone1->getValue()) && is_numeric($this->phone2->getValue()) && is_numeric($this->phone3->getValue())) {
@@ -497,7 +497,7 @@ class phone extends text implements HTML {
 			$this->formatted = '';
 		}
 	}
-	
+
 	// Get functions
 	public function getPhone1() {
 		return $this->phone1->getValue();
@@ -514,13 +514,13 @@ class phone extends text implements HTML {
 	public function getFormatted() {
 		return $this->formatted;
 	}
-	
+
 	// Label HTML
 	public function labelHTML($idBase, $label) {
 		echo '
 					<label for="' . $idBase . '[phone1]">' . $label . '</label>';
 	}
-	
+
 	// Input HTMl (note that the format is not (xxx) xxx-xxxx because the parentheses don't look good
 	// next to text boxes.  (maybe use CSS?)
 	public function inputHTML($idBase, $nameBase, $enabled) {
@@ -537,26 +537,26 @@ class phone extends text implements HTML {
 						$this->getPhone2() . '" maxlength="3"  style="width: 30px;"' . $enabled . ' required/> - 
 					<input id="' . $idBase . '[phone][3]" type="text" name="' . $nameBase . '[phone][3]" value ="' . 
 						$this->getPhone3() . '" maxlength="4" style="width: 40px;"' . $enabled . ' required/>';
-					
+
 	}
 }
 
 // Address class is a simple text class, stores the address line of an institution
 class address extends text implements HTML {
 	protected $className = 'address';
-	
+
 	public function labelHTML($idBase, $label) {
 		echo '
 					<label for="' . $idBase . '[address]">' . $label . '</label>';
 	}
-	
+
 	public function inputHTML($idBase, $nameBase, $enabled) {
 		if ($enabled) {
 			$enabledTag = '';
 		}
 		else {
 			$enabledTag = ' disabled';
-		}		
+		}
 		echo '
 					<input class="address" type="text" id="' . $idBase . '[address]" name="' . $nameBase . 
 						'[address]" value="' . $this->getValue() . '"' . $enabledTag . ' maxlength="128" required/>';
@@ -566,19 +566,19 @@ class address extends text implements HTML {
 // City class is a simple text class, stores the city of an institution
 class city extends text implements HTML {
 	protected $className = 'city';
-	
+
 	public function labelHTML($idBase, $label) {
 		echo '
 					<label for="' . $idBase . '[city]">' . $label . '</label>';
 	}
-	
+
 	public function inputHTML($idBase, $nameBase, $enabled) {
 		if ($enabled) {
 			$enabledTag = '';
 		}
 		else {
 			$enabledTag = ' disabled';
-		}		
+		}
 		echo '
 					<input class="city" type="text" id="' . $idBase . '[city]" name="' . $nameBase . 
 						'[city]" value="' . $this->getValue() . '"' . $enabledTag . ' maxlength="64" required/>';
@@ -588,19 +588,19 @@ class city extends text implements HTML {
 //Zip code is a simple text class (not integer, but validated as an integer), stores the zip code of an institution
 class zip extends text implements HTML {
 	protected $className = 'zip';
-	
+
 	public function labelHTML($idBase, $label) {
 		echo '
 					<label for="' . $idBase . '[zip]">' . $label . '</label>';
 	}
-	
+
 	public function inputHTML($idBase, $nameBase, $enabled) {
 		if ($enabled) {
 			$enabledTag = '';
 		}
 		else {
 			$enabledTag = ' disabled';
-		}		
+		}
 		echo '
 					<input class="zip" type="text" id="' . $idBase . '[zip]" name="' . $nameBase . 
 						'[zip]" value="' . $this->getValue() . '"' . $enabledTag . ' maxlength="5" required/>';
@@ -611,33 +611,33 @@ class zip extends text implements HTML {
 // The 1st digit of the ID identifies the day of the week
 class displayID extends number implements HTML {
 	protected $className = 'displayID';
-	
+
 	public function labelHTML($idBase, $label) {
 		echo '
 					<label for="' . $idBase . '[displayID]">' . $label . '</label>';
 	}
-	
+
 	public function inputHTML($idBase, $nameBase, $enabled) {
 		if ($enabled) {
 			$enabledTag = '';
 		}
 		else {
 			$enabledTag = ' disabled';
-		}		
+		}
 		echo '
 					<input class="id" type="number" min="100" max="799" id="' . $idBase . '[displayID]" name="' . $nameBase . 
 						'[displayID]" value="' . $this->getValue() . '"' . $enabledTag . ' required/>';
 	}
 }
-	
+
 // mtime is a meeting time, stored as an integer (time is a protected keyword in PHP)
 class mtime extends number {
 	protected $className = 'mtime';
 	protected $hour;
 	protected $minute;
 	protected $pm;
-	
-	
+
+
 	function __construct() {
 		if (func_num_args() == 0) {
 			$this->value = null;
@@ -659,13 +659,13 @@ class mtime extends number {
 			die('Invalid number of arguments for dow class!');
 		}
 	}
-	
+
 	// convert hour, minute, am/pm inputs into SQL and display formats
 	protected function encode() {
 		$this->value = date('H:i', strtotime($this->hour . ':' . $this->minute . ' ' . $this->ampm)); // SQL format
 		$this->formatted = date('g:i A', strtotime($this->value)); // Display format
 	}
-	
+
 	// Convert SQL format into hour, minute, am/pm, and display formats
 	protected function decode() {
 		$this->formatted = date('g:i A', strtotime($this->value));
@@ -673,12 +673,12 @@ class mtime extends number {
 		$this->minute = date('i', strtotime($this->value));
 		$this->ampm = date('A', strtotime($this->value));
 	}
-	
+
 	public function labelHTML($idBase, $label) {
 		echo '
 					<label for="' . $idBase . '[hour]">' . $label . '</label>';
 	}
-	
+
 	public function inputHTML($idBase, $nameBase, $enabled) {
 		if ($enabled) {
 			$enabledTag = '';
@@ -686,7 +686,7 @@ class mtime extends number {
 		else {
 			$enabledTag = ' disabled';
 		}
-		
+
 		// Hour input
 		echo '
 						<select id="' . $idBase . '[hour]" name="' . $nameBase . '[hour]" ' . $enabledTag . ' required/>
@@ -703,13 +703,13 @@ class mtime extends number {
 			}
 			echo '
 						</select>';
-		
+
 		// Minute input
 		echo '
 					<select id="' . $idBase . '[minute]" name="' . $nameBase . '[minute]" ' . $enabledTag . ' required/>
 						<option value=""></option>';
 		for ($i=0; $i<=45; $i=$i+15) {
-			
+
 			if (!is_null($this->minute) && ($i == $this->minute)) {
 				echo '
 						<option value="' . sprintf('%02d', $i) . '" selected>' . sprintf('%02d', $i) . '</option>';
@@ -721,7 +721,7 @@ class mtime extends number {
 		}
 		echo '
 					</select>';
-		
+
 		// AM/PM input
 		echo '
 					<select id="' . $idBase . '[ampm]" name="' . $nameBase . '[ampm]" ' . $enabledTag . ' required/>';
@@ -755,7 +755,7 @@ class mtime extends number {
 // are in play (SQL, display, PHP, etc.)
 class mdate extends text implements HTML {
 	protected $className = 'mtime';
-	
+
 	protected function format() {
 		if (empty($this->value) || is_null($this->value)) {
 			$this->formatted = $this->defaultFormatted;
@@ -776,28 +776,28 @@ class mdate extends text implements HTML {
 			}
 		}
 	}
-	
+
 	public function labelHTML($idBase, $label) {
 		echo '
 					<label for="' . $idBase . '[date]">' . $label . '</label>';
 	}
-	
+
 	public function inputHTML($idBase, $nameBase, $enabled) {
 		if ($enabled) {
 			$enabledTag = '';
 		}
 		else {
 			$enabledTag = ' disabled';
-		}		
+		}
 		echo '
 					<input class="time" type="date" id="' . $idBase . '[date]" name="' . $nameBase . 
 						'[date]" value="' . $this->getValue() . '"' . $enabledTag . ' required/>';
 	}
-	
+
 	// Get the short version of the date
 	public function getFormattedShort() {
 		return $this->formattedShort;
 	}
-}	
-	
+}
+
 ?>

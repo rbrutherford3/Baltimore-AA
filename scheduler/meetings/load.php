@@ -49,7 +49,7 @@ if (isset($_POST[$meetingBase]['id'])) {	// Update db if editing
 		$_POST[$meetingBase]['gender'], $sponsorID, $cosponsorID, $cosponsor2ID, 
 		$_POST[$meetingBase]['notesPublic'], $_POST[$meetingBase]['notes'], isset($_POST[$meetingBase]['active']), 
 		$_POST[$meetingBase]['id']);
-	
+
 	// Check to see that information isn't conflicting with another record
 	if ($meeting->checkExistsExcluding()) {
 		echo '
@@ -59,7 +59,7 @@ if (isset($_POST[$meetingBase]['id'])) {	// Update db if editing
 			window.location = "form.php?id=' . $meeting->getID() . '";
 			</script>';
 	}
-	
+
 	// Update otherwise
 	else {
 		$meeting->update();	// (add handling for false results?)
@@ -72,7 +72,7 @@ else { // Insert into db if adding
 		$_POST[$meetingBase]['hour'], $_POST[$meetingBase]['minute'], $_POST[$meetingBase]['ampm'], 
 		$_POST[$meetingBase]['gender'], $sponsorID, $cosponsorID, $cosponsor2ID, 
 		$_POST[$meetingBase]['notesPublic'], $_POST[$meetingBase]['notes'], isset($_POST[$meetingBase]['active']));
-		
+
 	// Check to see that information isn't already in db
 	if ($meeting->checkExists()) {
 		echo '

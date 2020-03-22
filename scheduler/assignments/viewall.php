@@ -4,8 +4,8 @@
 
 include_once '../../lib/assignment.php';
 include_once '../../lib/dbconnect.php';
-	
-// Grab parameters from URL	
+
+// Grab parameters from URL
 if (!isset($_GET['month']) || empty($_GET['month'])) {
 	$month = null;
 }

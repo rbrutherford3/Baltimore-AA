@@ -14,13 +14,13 @@ date_default_timezone_set('America/New_York');
 
 // Class assignment, has only one function: viewAll
 class assignment {
-	
+
 	protected $db;
-	
+
 	function __construct($db) {
 		$this->db = $db;
 	}
-	
+
 	/* The viewAll function is the only function in this class.  Its arguments are:
 	$monthQ: query month, null if all months and years
 	$yearQ: query year, null if all months and years
@@ -29,11 +29,11 @@ class assignment {
 	$sort: sort mode, zero if null
 	$edit: true if editing assignments, false if simply viewing them */
 	public function viewAll($monthQ, $yearQ, $groupQ, $meetingQ, $sort, $edit) {
-		
+
 		$viewPeople = false;
 		$viewLinks = true;
 		$viewAddress = false;
-		
+
 		// SET UP ASSIGNMENTS SQL
 		// create different date SQL statements based on whether month and/or year were specified
 		if (is_null($monthQ) && is_null($yearQ)) {
@@ -94,12 +94,12 @@ class assignment {
 				$sortSQL = "ORDER BY `DisplayID` ASC, `Date` ASC;";
 				break;
 		}
-		
+
 		$scopeSQL = $dateSQL . 
 			$groupSQL . 
 			$meetingSQL . 
 			$sortSQL;
-		
+
 		// Compile SQL statement, note the optional bindings
 		$sqlAssignments = "SELECT 
 			a.`ID`, 
@@ -150,9 +150,9 @@ class assignment {
 			LEFT JOIN people c
 			ON m.`CoSponsor`=c.`ID`
 			LEFT JOIN people c2
-			ON m.`CoSponsor2`=c2.`ID`" : "") .				
+			ON m.`CoSponsor2`=c2.`ID`" : "") .
 			$scopeSQL;
-			
+
 		$monthView = true;
 		$stmtAssignments = $this->db->prepare($sqlAssignments);
 		if (!is_null($monthQ)) {
@@ -183,10 +183,10 @@ class assignment {
 				$results=true;
 			}
 		}
-		
+
 		// Only do the following if the query was successful...
 		if ($results) {
-		
+
 			// See if there are any incomplete meeting assignments (no groups)
 			$complete = true;
 			//$counter = 0;
@@ -197,9 +197,9 @@ class assignment {
 				}
 				//$counter++;
 			}
-			
+
 			//echo '<script>alert("' . ($incomplete ? 'Missing Entries' : 'No missing entries'). '");</script>';
-		
+
 			// If editing assignments, query compatible groups for each meeting for the drop-down menu
 			if ($edit) {
 				$rowsMeetings = array();
@@ -212,7 +212,7 @@ class assignment {
 						$rowsMeetings[$rowMeetings['ID']] = $rowMeetings;
 					}
 				}
-				
+
 				// Query the compatible groups for each meeting
 				// (Note the use of pass-by-referencing to be able to edit the contents of the array)
 				foreach($rowsMeetings as &$rowMeetings) {
@@ -270,10 +270,10 @@ class assignment {
 				}
 			}
 		}
-		
+
 		// START HTML
 		include('header.php');
-		
+
 		// If editing vs. viewing, then there is different navigation buttons, titles, and javascript
 		if ($edit) {
 			// Header HTML (include tables.css)
@@ -307,7 +307,7 @@ class assignment {
 				<title>Institution Committee - Edit Assignments</title>
 			</head>
 			<body>';
-			
+
 			// Add option to automatically finish missing entries if in a one-month view of all groups and meetings
 			if ($monthView && !$complete) {
 				echo '
@@ -335,7 +335,7 @@ class assignment {
 			echo '
 				</p>';
 		}
-		
+
 		// Only do anything if there were results from the assignment query...
 		if ($results) {
 			// Start table
@@ -350,8 +350,8 @@ class assignment {
 							<th>Meeting ID</th>
 							<th>Day of Week</th>
 							<th>Institution</th>
-							<th>Group (last month assigned to institiution)</th>						
-							<th>Notes</th>						
+							<th>Group (last month assigned to institiution)</th>
+							<th>Notes</th>
 						</tr>
 					</thead>
 					<tbody>';
@@ -379,7 +379,7 @@ class assignment {
 							<th>Address</th>
 					';
 				}
-				if ($viewPeople) {	
+				if ($viewPeople) {
 					echo '
 							<th>Sponsor</th>
 							<th>Sponsor Phone</th>
@@ -398,20 +398,20 @@ class assignment {
 							<th>Rep 2 Phone</th>';
 				}
 				echo '
-							<th>Notes</th>						
+							<th>Notes</th>
 						</tr>
 					</thead>';
 			}
-			
+
 			// Count is for refering to HTML elements in form for editing (especially for matchCheck.js)
 			if ($edit) {
 				$count=0;
 				$countMax = count($rowsAssignments);
 			}
-			
+
 			// Run through assignments and display each table row
 			foreach($rowsAssignments as $row) {
-				
+
 				// If group ID is null, then there was no selection, display special HTML later
 				if (is_null($row['GroupID'])) {
 					$noSelection = true;
@@ -427,7 +427,7 @@ class assignment {
 					$noSelection = false;
 					$sponsorsNight = false;
 				}
-				
+
 				// Grab data from assignment row
 				$mdate = new mdate($row['Date']);
 				$dow = new dow($row['DOW']);
@@ -435,10 +435,10 @@ class assignment {
 				$group = $row['GroupID'];
 				$groupName = $row['Group'];
 				$meeting = $row['MeetingID'];
-				
+
 				// If editing, display pulldown menues
 				if ($edit) {
-					
+
 					// Display date, meetingID, day of week, and institiution
 					echo '
 						<tr class="rowA">
@@ -446,7 +446,7 @@ class assignment {
 							<td nowrap>' . $row['DisplayID'] . '</td>
 							<td nowrap>' . $dow->getFormatted() . '</td>
 							<td nowrap>' . $row['Institution'] . '</td>';
-					
+
 					// NOTE: THE FOLLOWING STYLINGS ARE DONE BECAUSE YOU CANNOT FORMAT PULLDOWN MENU TEXT
 					// If no selection made, display red
 					if ($noSelection) {
@@ -458,33 +458,33 @@ class assignment {
 						echo '
 							<td style="background-color: black;">';
 					}
-					
+
 					// Otherwise, no styling
 					else {
 						echo '
 							<td>';
 					}
-					
+
 					// Display hidden fields used for loading values in separate PHP file
 					// ('assignment' field tracks which assignment it is, and 'changed' tracks which ones were changed)
 					echo '
 								<input name="assignment[' . $count . ']" type="hidden" value="' . $assignment . '">
 								<input name="changed[' . $count . ']" type="hidden" value="0">';
-					
+
 					// DISPLAY PULLDOWN MENU (changes call a js function to check whether the change resulted in a conflict or not, and also 
 					// marks the 'changed' hidden HTML)
 					echo '
 								<select style="width: 300px;" name="group[' . $count . ']" 
 								onchange="document.forms[\'form\'][\'changed[' . $count . ']\'].value=1; matchCheck(' . $count . ', ' . $countMax . ');">';
-					
+
 					// No selection
 					echo '
 									<option value="" selected>***No group selected!***</option>';
-					
+
 					// Sponsor's night selection
 					echo '
 									<option value="0" ' . ($sponsorsNight ? ' selected' : '') . '>SPONSOR\'S NIGHT</option>';
-									
+
 					// Provide a selection for each of the meeting's compatible groups
 					foreach($rowsMeetings[$row['MeetingID']]['Groups'] as $groups) {
 						// Select the assignment's current group, display the group name along with the date that it was last at that meeting's institution
@@ -492,7 +492,7 @@ class assignment {
 									<option value="' . $groups['gID'] . '"' . (($group==$groups['gID']) ? ' selected' : '') . '>' . 
 									$groups['Name'] . (is_null($groups['Date']) ? '' : ' (' . date('n/Y', strtotime($groups['Date'])) . ')') . '</option>';
 					}
-					
+
 					// End the select statement, display notes field (note the js that sets the 'changed' field)
 					echo '
 								</select>
@@ -503,7 +503,7 @@ class assignment {
 						</tr>';
 					$count++;
 				}
-				
+
 				// If viewing, display without pulldown menus (note the links to the meetings and groups)
 				else {
 					$repPhone = new phone($row['RepPhone']);
@@ -550,10 +550,10 @@ class assignment {
 			echo '
 					</tbody>
 					</table>';
-					
+
 			// Display different buttons at the end if editing vs. viewing
 			if ($edit) {
-				echo '			
+				echo '
 					<p>
 					<a class="button" href="../">Home</a>
 					<a class="button" href="viewall.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . ' ">Back</a>
@@ -580,10 +580,10 @@ class assignment {
 					</form>';
 				}
 			}
-			
+
 			// If we're viewing a whole month, then we should show the standby and probation groups
 			if (is_null($groupQ) && is_null($meetingQ) && !is_null($monthQ)) {
-				
+
 				// Simply select all the active, non-probation groups that didn't get assignments that month
 				$sqlStandby = "SELECT `ID`, `Name` 
 						FROM groups 
@@ -603,7 +603,7 @@ class assignment {
 				$stmtStandby = $this->db->prepare($sqlStandby);
 				$stmtStandby->bindValue(":month", $month, PDO::PARAM_STR);
 				$stmtStandby->bindValue(":year", $year, PDO::PARAM_STR);
-				
+
 				// Display all the groups found (might change so that the loading comes before the display, but this works for now)
 				if ($stmtStandby->execute()) {
 					if ($stmtStandby->rowCount() > 0) {
@@ -613,7 +613,7 @@ class assignment {
 						}
 					}
 				}
-				
+
 				// Do the same thing, but for the probation groups
 				$sqlProbation = "SELECT `ID`, `Name` FROM groups WHERE `Active` AND `Probation` ORDER BY `Name` ASC";
 				$stmtProbation = $this->db->prepare($sqlProbation);
@@ -627,7 +627,7 @@ class assignment {
 				}
 			}
 		}
-		
+
 		// If there were no assignments, then say so
 		else {
 			echo '<h2>Your search returned zero results!</h2>';
@@ -636,13 +636,13 @@ class assignment {
 			</body>
 			</html>';
 	}
-	
+
 	// Function to export the data being viewed into a .tsv file for reports, etc.  Data is re-queried with specified 
 	// parameters to include all data from the database (including rep and sponsor info) associated with an assignment
 	public function export($monthQ, $yearQ, $groupQ, $meetingQ, $sort) {
-		
+
 		$alldates = false;
-		
+
 		// SET UP "SCOPE SQL (copied from assignments.php, yeah I know...)
 		// create different date SQL statements based on whether month and/or year were specified
 		if (is_null($monthQ) && is_null($yearQ)) {
@@ -704,13 +704,13 @@ class assignment {
 				$sortSQL = "ORDER BY `Meeting ID` ASC, `Date` ASC;";
 				break;
 		}
-		
+
 		// Compile scop sql
 		$scopeSQL = $dateSQL . 
 				$groupSQL . 
 				$meetingSQL . 
 				$sortSQL;
-		
+
 		// SQL statement (includes all fields except ID fields associated with a given entry)
 		$sql = "SELECT
 			`a`.`ID` AS `Assignment Key`,
@@ -781,10 +781,10 @@ class assignment {
 			LEFT JOIN `people` `r` ON `g`.`Rep` = `r`.`ID` 
 			LEFT JOIN `people` `r2` ON `g`.`Rep2` = `r2`.`ID`" .
 			$scopeSQL;
-			
-		
+
+
 		$stmt = $this->db->prepare($sql);
-		
+
 		if (!is_null($monthQ)) {
 			$stmt->bindValue(":month", $month, PDO::PARAM_INT);
 		}
@@ -797,10 +797,10 @@ class assignment {
 		if (!is_null($meetingQ)) {
 			$stmt->bindValue(":meeting", $meetingQ, PDO::PARAM_INT);
 		}
-		
+
 		// Compile export file as string
 		$tsv_export = '';
-		
+
 		if ($stmt->execute()) {
 			$numColumns = $stmt->columnCount();
 			if ($stmt->rowCount() > 0) {
@@ -809,7 +809,7 @@ class assignment {
 					$tsv_export.= $stmt->getColumnMeta($i)['name']."\t";
 				}
 				$tsv_export.= "\n";
-				
+
 				// Grab data
 				while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 					for ($i = 0; $i < $numColumns; $i++) {
@@ -819,9 +819,9 @@ class assignment {
 				}
 			}
 		}
-		
-		
-		
+
+
+
 		// Set up filename
 
 		if ($alldates) {
@@ -867,9 +867,9 @@ class assignment {
 				}
 			}
 		}
-		
+
 		$filename = $filenameGroup . $filenameMeeting . $filenameDate;
-		
+
 		date_default_timezone_set('US/Eastern');
 		$timeStamp = date('YmdHis');
 
@@ -877,7 +877,7 @@ class assignment {
 		header('Content-type: text/plain');
 		header('Content-Disposition: attachment; filename="Balt AA Inst Comm Mtg Mgr - Export ' . $timeStamp . $filename . '.tsv"');
 		echo($tsv_export);
-	}	
+	}
 }
 
 /* class assignment extends data {
@@ -903,15 +903,15 @@ class assignment {
 			// Store inputs into members
 			$this->mdate = new mdate($inputs[0]);
 			$this->meeting = new meeting($this->db, $inputs[1]);
-			$this->group = new group($this->db, $inputs[2]);			
-			
+			$this->group = new group($this->db, $inputs[2]);
+
 			// Store the parameters used for SQL statements from the members
 			$this->params[0] = $this->mdate->getValue();
 			$this->params[1] = $this->meeting->getID();
 			$this->params[2] = $this->group->getID();
-		}		
+		}
 	}
-	
+
 	// Parse results from SQL view function into group members.  Note that this
 	// will overwrite any members defined in the constructor
 	protected function parseOutput() {
@@ -919,15 +919,15 @@ class assignment {
 		$this->meeting = new meeting($this->db, $this->params[1]);
 		$this->group = new group($this->db, $this->params[2]);
 	}
-	
+
 	// Do the same with arrays for viewall.  Note that these have to be different
 	// names from the members, otherwise it will overwrite them
 	protected function parseOutputs() {
 		$this->mdates[] = new mdate($this->params[0]);
 		$this->meetings[] = new meeting($this->db, $this->params[1]);
-		$this->groups[] = new group($this->db, $this->params[2]);	
+		$this->groups[] = new group($this->db, $this->params[2]);
 	}
-	
+
 	// Public 'get' functions to grab individual members
 	public function getMDate() {
 		return $this->mdate();
@@ -938,7 +938,7 @@ class assignment {
 	public function getGroup() {
 		return $this->group;
 	}
-	
+
 	// Debugging code to output members.  Possibly depricated.
 	public function output() {
 		echo $this->id . '<br>';

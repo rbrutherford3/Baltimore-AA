@@ -64,18 +64,18 @@ else if ($institutionOption==3) {
 
 // Only grab institution info if adding or editing institution, not selecting
 if (($institutionOption==2) || ($institutionOption==3)) {
-	
+
 	// Grab institution name
 	$institutionName = $_POST['institutionName'];
-	
+
 	// Grab institution address
 	$institutionAddress = $_POST['institutionAddress'];
 	$institutionCity = $_POST['institutionCity'];
 	$institutionZip = $_POST['institutionZip'];
-	
+
 	// Grab institution bg
 	$institutionBG = (isset($_POST['institutionBG'])) ? 1 : 0;
-	
+
 	// Grab institution notes (set to null if blank so a blank entry doesn't go in the database)
 	if($_POST['institutionNotes']=='') {
 		$institutionNotes = null;	// Keep null if blank
@@ -87,7 +87,7 @@ if (($institutionOption==2) || ($institutionOption==3)) {
 
 // If a new meeting or the meeting ID has changed
 if (($newMeeting) || (!($newMeeting) && ($meetingOldDisplayID <> $meetingNewDisplayID))) {
-	
+
 	// Check to see if meeting by same ID already exists
 	$stmt = $db->prepare("SELECT ID FROM meetings WHERE DisplayID=:meetingNewDisplayID;");
 	$stmt->bindValue(':meetingNewDisplayID', $meetingNewDisplayID, PDO::PARAM_INT);
@@ -111,7 +111,7 @@ if ($institutionOption==2) {
 	$stmt = $db->prepare("SELECT ID FROM institutions WHERE Name=:institutionName;");
 	$stmt->bindValue(':institutionName', $institutionName, PDO::PARAM_STR);
 	$stmt->execute();
-	
+
 	// Warn the user if the rep already exists in the database (might need to modify notes)
 	if ($row = $stmt->fetch()) {
 		$institutionID = $row['ID'];
@@ -129,7 +129,7 @@ if ($institutionOption==2) {
 		$stmt->bindValue(':institutionBG', $institutionBG, PDO::PARAM_INT);
 		$stmt->bindValue(':institutionNotes', $institutionNotes, PDO::PARAM_STR);
 		$stmt->execute();
-		
+
 		$institutionID = $db->lastInsertId();
 	}
 }
@@ -162,9 +162,9 @@ if ($newMeeting) {
 	$stmt->bindValue(':meetingNotesPublic', $meetingNotesPublic, PDO::PARAM_STR);
 	$stmt->bindValue(':meetingNotesPrivate', $meetingNotesPrivate, PDO::PARAM_STR);
 	$stmt->bindValue(':meetingActive', $meetingActive, PDO::PARAM_INT);
-	
+
 	$stmt->execute();
-	
+
 	$meetingID = $db->lastInsertId(); // Grab ID of record just inserted
 }
 else {
@@ -184,7 +184,7 @@ else {
 	$stmt->bindValue(':meetingNotesPrivate', $meetingNotesPrivate, PDO::PARAM_STR);
 	$stmt->bindValue(':meetingActive', $meetingActive, PDO::PARAM_INT);
 	$stmt->bindValue(':meetingID', $meetingID, PDO::PARAM_INT);
-	
+
 	$stmt->execute();
 }
 

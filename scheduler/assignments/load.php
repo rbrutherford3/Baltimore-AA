@@ -9,7 +9,7 @@ echo '
 	<body>
 	Loading...';
 
-	
+
 // Grab parameters from previous page
 if (!isset($_POST['month']) || empty($_POST['month'])) {
 	$monthQ = null;
@@ -63,5 +63,5 @@ echo '
 	</script>';
 
 echo '</body>';
-echo '</html>';	
+echo '</html>';
 ?>

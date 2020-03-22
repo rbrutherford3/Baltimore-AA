@@ -18,7 +18,7 @@ if ($stmtDate->execute()) {
 
 // Stop the whole process if there IS no latest date in assignment table...
 if ($queryDateSuccess) {
-	
+
 	// Setup month selection (only the most recent month of assignments or the next one are allowed)
 	$lastDate = explode('-', $lastDate);
 	$lastYear = $lastDate[0];
@@ -61,7 +61,7 @@ if ($queryDateSuccess) {
 			<label for="oldmonth">Prev Month (' . $oldMonth->format('F Y') . ')</label> <font color="red">OVERWRITES EXISTING DATA!</font>
 		</p>
 		<br>';
-		
+
 	// Select cutoff date, default 4th of month (explained below in output text)
 	echo '
 		<h2>Cutoff date:</h2>
@@ -77,7 +77,7 @@ if ($queryDateSuccess) {
 		</p>
 		<br>';
 
-	// Select institution threshold, default 3 or more institutions (explained below in output)	
+	// Select institution threshold, default 3 or more institutions (explained below in output)
 	echo '
 		<h2>Institution threshold:</h2>
 		(Institutions with these number of meetings or more automatically get a sponsor\'s night)
@@ -91,7 +91,7 @@ if ($queryDateSuccess) {
 			</select>
 		</p>
 		<br>';
-		
+
 	// Navigation buttons
 	echo '
 		<p>

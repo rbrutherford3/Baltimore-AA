@@ -42,7 +42,7 @@ function loadInstitution($db, $nameBase) {
 		}
 		return $institution->getID();	// Return the ID for insertion into meeting object
 	}
-	else if ($option == 3) {	// If selecting an institution from the pulldown menu	
+	else if ($option == 3) {	// If selecting an institution from the pulldown menu
 		return $_POST[$nameBase]['pulldown'];	// Simply return the ID!
 	}
 	else {

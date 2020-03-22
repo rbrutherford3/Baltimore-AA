@@ -79,7 +79,7 @@ if ($stmtGroup->execute()) {
 		$rowsGroup[] = $rowGroup;
 	}
 }
-	
+
 echo '
 	<h2>Select group:</h2>
 	<p>
@@ -93,7 +93,7 @@ echo '
 	</select>
 	</p>
 	<br>';
-	
+
 // Navigation buttons
 echo '
 	<p>
@@ -102,6 +102,6 @@ echo '
 	</p>
 	</form>
 </body>
-</html>';	
+</html>';
 
 ?>

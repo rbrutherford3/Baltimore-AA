@@ -12,7 +12,7 @@ include_once 'person.php';
 
 // Meeting class holds all the information and methods for a meeting.
 class meeting extends data {
-	
+
 	// Define all default properties.  Data class uses this information to process SQL statements
 	protected $db;
 	protected $table = 'meetings';
@@ -25,7 +25,7 @@ class meeting extends data {
 	protected $sortFields = array(0);
 	protected $params = array();
 	protected $numParams = 13;
-	
+
 	// Store all inputs into members
 	protected function parseInput($inputs) {
 		if (is_null($inputs)) {	// If no inputs, then start with empty members
@@ -53,8 +53,8 @@ class meeting extends data {
 			$this->cosponsor2 = new person($this->db, $inputs[9]);
 			$this->notesPublic = new notesPublic($inputs[10]);
 			$this->notesPrivate = new notes($inputs[11]);
-			$this->active = new active($inputs[12]);			
-			
+			$this->active = new active($inputs[12]);
+
 			// Store the parameters used for SQL statements from the members
 			$this->params[0] = $this->displayID->getValue();
 			$this->params[1] = $this->institution->getID();
@@ -69,7 +69,7 @@ class meeting extends data {
 			$this->params[10] = $this->active->getValue();
 		}
 	}
-	
+
 	// Parse results from SQL view function into meeting members.  Note that this
 	// will overwrite any members defined in the constructor
 	protected function parseOutput() {
@@ -83,9 +83,9 @@ class meeting extends data {
 		$this->cosponsor2 = new person($this->db, $this->params[7]);
 		$this->notesPublic = new notesPublic($this->params[8]);
 		$this->notesPrivate = new notes($this->params[9]);
-		$this->active = new active($this->params[10]);	
+		$this->active = new active($this->params[10]);
 	}
-	
+
 	// Do the same with arrays for viewall.  Note that these have to be different
 	// names from the members, otherwise it will overwrite them
 	protected function parseOutputs() {
@@ -99,9 +99,9 @@ class meeting extends data {
 		$this->cosponsor2s[] = new person($this->db, $this->params[7]);
 		$this->notesPublics[] = new notesPublic($this->params[8]);
 		$this->notesPrivates[] = new notes($this->params[9]);
-		$this->actives[] = new active($this->params[10]);	
+		$this->actives[] = new active($this->params[10]);
 	}
-	
+
 	// Public 'get' functions to grab individual members
 	public function getDisplayID() {
 		return $this->displayID;
@@ -120,7 +120,7 @@ class meeting extends data {
 	}
 	public function getSponsor() {
 		return $this->sponsor;
-	}	
+	}
 	public function getCoSponsor() {
 		return $this->cosponsor;
 	}
@@ -136,7 +136,7 @@ class meeting extends data {
 	public function getActive() {
 		return $this->active;
 	}
-	
+
 	// Debugging code to output members.  Possibly depricated.
 	public function output() {
 		echo $this->id . '<br>';
@@ -152,7 +152,7 @@ class meeting extends data {
 		echo '&nbsp&nbsp' . $this->notesPrivate->getFormatted() . '<br>';
 		echo '&nbsp&nbsp' . $this->active->getFormatted() . '<br>';
 	}
-	
+
 	// HTML for form page.  Uses pre-made HTML scripts of members from datatypes.php
 	public function inputHTML($idBase, $nameBase, $enabled) {
 		echo '
@@ -167,30 +167,30 @@ class meeting extends data {
 		echo '<br>';
 		$this->displayID->inputHTML($idBase, $nameBase, $enabled);
 		echo '</p>';
-		
+
 		echo '<p>';
 		$this->dow->labelHTMLpulldown($idBase, 'Day of the week:');
 		echo '<br>';
 		$this->dow->inputHTMLpulldown($idBase, $nameBase, $enabled);
 		echo '</p>';
-		
+
 		echo '<p>';
 		$this->mtime->labelHTML($idBase, 'Meeting time:');
 		echo '<br>';
 		$this->mtime->inputHTML($idBase, $nameBase, $enabled);
 		echo '</p>';
-		
+
 		echo '<p>';
 		$this->gender->labelHTML($idBase, 'Gender:');
 		echo '<br>';
 		$this->gender->inputHTML($idBase, $nameBase, $enabled);
 		echo '</p>';
-		
+
 		echo '<p>';
 		$this->active->inputHTML($idBase, $nameBase, $enabled);
 		$this->active->labelHTML($idBase, 'Meeting Active');
 		echo '</p>';
-		
+
 		echo '<p>';
 		$this->notesPublic->labelHTML($idBase, 'Public notes (printed):');
 		echo '<br>';
@@ -202,18 +202,18 @@ class meeting extends data {
 		echo '<br>';
 		$this->notesPrivate->inputHTML($idBase, $nameBase, $enabled);
 		echo '</p>';
-		
+
 		echo '
-		
+
 			</div>';
 	}
-	
+
 	// Hidden HTML field for ID, for passing on to load.php
 	private function idHTML($idBase, $nameBase) {
 		echo '
 				<input type="hidden" id="' . $idBase . '[id]" name="' . $nameBase . '[id]" value="' . $this->id . '">';
 	}
-	
+
 	// Simple tabular code for displaying a meeting in view.php
 	// "Public" option allows for hiding of private notes and hyperlinks for public view
 	public function outputHTML($public) {
@@ -263,7 +263,7 @@ class meeting extends data {
 					<td>
 						' . $this->mtime->getFormatted() . '
 					</td>
-				</tr>		
+				</tr>
 				<tr>
 					<td>
 						<b>Gender:</b>
@@ -363,7 +363,7 @@ class meeting extends data {
 					<td>
 						' . $this->institution->city->getFormatted() . '
 					</td>
-				</tr>		
+				</tr>
 				<tr>
 					<td>
 						<b>Zip Code:</b>
@@ -558,7 +558,7 @@ class meeting extends data {
 			}
 			else {
 				echo '
-					<a href="../people/view.php?id=' . $this->cosponsor2->getID() . '">' . $this->cosponsor2->getName()->getFormatted() . $this->cosponsor2->getInitial()->getFormatted() . '</a>';	
+					<a href="../people/view.php?id=' . $this->cosponsor2->getID() . '">' . $this->cosponsor2->getName()->getFormatted() . $this->cosponsor2->getInitial()->getFormatted() . '</a>';
 			}
 			echo '
 					</td>
@@ -598,10 +598,10 @@ class meeting extends data {
 		</html>';
 		}
 	}
-	
+
 	// Function to display outputs if using viewall.php in a table
 	public function outputsHTML() {
-	
+
 		// Header HTML (include tables.css)
 		include('header.php');
 		echo '
@@ -632,7 +632,7 @@ class meeting extends data {
 							<th>Co-Sponsor</th>
 							<th>Phone Number</th>
 							<th>Second Co-Sponsor</th>
-							<th>Phone Number</th>						
+							<th>Phone Number</th>
 						</tr>
 					</thead>
 					<tbody>';
@@ -654,7 +654,7 @@ class meeting extends data {
 			echo '
 							<td nowrap>' . $this->displayIDs[$i]->getFormatted() .'</td>
 							<td nowrap>' . $this->dows[$i]->getFormatted() .'</td>
-							<td nowrap>' . $this->mtimes[$i]->getFormatted() . '</td>					
+							<td nowrap>' . $this->mtimes[$i]->getFormatted() . '</td>
 							<td nowrap><a href="../institutions/view.php?id=' . $this->institutions[$i]->getID() . '">' . $this->institutions[$i]->name->getFormatted() . '</a></td>
 							<td nowrap>' . $this->genders[$i]->getFormatted() . '</td>
 							<td nowrap>' . ($this->institutions[$i]->bg->getValue() ? 'BG check req.' : '-') . '</td>
@@ -667,7 +667,7 @@ class meeting extends data {
 							<td nowrap>' . (is_null($this->cosponsors[$i]->getID()) ? '-' : $this->cosponsors[$i]->getPhone()->getFormatted()) . '</td>
 							<td nowrap>' . (is_null($this->cosponsor2s[$i]->getID()) ? '-' : '<a href="../people/view.php?id=' . $this->cosponsor2s[$i]->getID() . '">' . 
 								$this->cosponsor2s[$i]->getName()->getFormatted() . $this->cosponsor2s[$i]->getInitial()->getFormatted()) . '</a></td>
-							<td nowrap>' . (is_null($this->cosponsor2s[$i]->getID()) ? '-' : $this->cosponsor2s[$i]->getPhone()->getFormatted()) . '</td>						
+							<td nowrap>' . (is_null($this->cosponsor2s[$i]->getID()) ? '-' : $this->cosponsor2s[$i]->getPhone()->getFormatted()) . '</td>
 						</tr>';
 		}
 

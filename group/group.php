@@ -97,7 +97,7 @@ if ($numRows > 0) {
 		$meeting->cosponsor2->view();
 		$meeting->outputHTML(true);
 	}
-	
+
 	// Button navigation buttons
 	echo '
 <hr>

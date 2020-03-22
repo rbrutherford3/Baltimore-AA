@@ -6,7 +6,7 @@ echo '
 	</head>
 	<body>
 	Loading...';
-	
+
 $csv = array_map('str_getcsv', file('history.csv'));
 //echo $csv[0][1];
 
@@ -25,7 +25,7 @@ for ($i=1; $i<count($csv); $i++) {
 		$date = date_create_from_format('Y/m',$csv[0][$j]);
 		//echo $date->format('n/y') . '<br>';
 		$assignment = $csv[$i][$j];
-		
+
 		// If there is an 'x' next to the number, then grab the number and put the 'x' in tht notes
 		if (substr($assignment, -1, 1) == 'x') {
 			$assignment = substr($assignment, 0, -1);
@@ -36,7 +36,7 @@ for ($i=1; $i<count($csv); $i++) {
 		}
 		if (is_numeric($assignment)) {
 			$assignment = (int)$assignment;
-			
+
 			$sql = "SELECT ID from meetings WHERE DisplayID=:DisplayID;";
 			$stmt = $db->prepare($sql);
 			$stmt->bindValue(":DisplayID", $assignment);
@@ -62,10 +62,10 @@ for ($i=1; $i<count($csv); $i++) {
 			$stmt->bindValue(":Notes", $notes, PDO::PARAM_STR);
 			$stmt->execute();
 
-			
+
 			//echo 'Group ID ' . $groupID . ' was assigned to meeting ' . $assignment . ' (' . $assignment2 . ')on date ' . $date->format('n/y') . '<br>';
 		}
-		
+
 		//echo $dates[$i-1]->format('n/y') . '<br>';
 	}
 }
@@ -77,6 +77,6 @@ echo '
 	</script>';
 
 echo '</body>';
-echo '</html>';	
+echo '</html>';
 
 ?>

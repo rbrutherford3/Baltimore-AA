@@ -37,7 +37,7 @@ if (isset($_POST[$groupBase]['id'])) {	// Update db if editing
 		isset($_POST[$groupBase]['dow'][4]), isset($_POST[$groupBase]['dow'][5]), isset($_POST[$groupBase]['dow'][6]), 
 		$_POST[$groupBase]['gender'], isset($_POST[$groupBase]['bg']), $rep1ID, $rep2ID, $_POST[$groupBase]['notes'], 
 		isset($_POST[$groupBase]['active']), isset($_POST[$groupBase]['probation']), $_POST[$groupBase]['id']);
-	
+
 	// Check to see that information isn't conflicting with another record
 	if ($group->checkExistsExcluding()) {
 		echo '
@@ -47,7 +47,7 @@ if (isset($_POST[$groupBase]['id'])) {	// Update db if editing
 			window.location = "form.php?id=' . $group->getID() . '";
 			</script>';
 	}
-	
+
 	// Update otherwise
 	else {
 		$group->update();	// (add handling for false results?)
@@ -61,7 +61,7 @@ else { // Insert into db if adding
 		isset($_POST[$groupBase]['dow'][4]), isset($_POST[$groupBase]['dow'][5]), isset($_POST[$groupBase]['dow'][6]), 
 		$_POST[$groupBase]['gender'], isset($_POST[$groupBase]['bg']), $rep1ID, $rep2ID, $_POST[$groupBase]['notes'], 
 		isset($_POST[$groupBase]['active']), isset($_POST[$groupBase]['probation']));
-		
+
 	// Check to see that information isn't already in db
 	if ($group->checkExists()) {
 		echo '

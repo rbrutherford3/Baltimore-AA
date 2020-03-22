@@ -11,7 +11,7 @@ include_once 'person.php';
 
 // Group class holds all the information and methods for a group.
 class group extends data {
-	
+
 	// Define all default properties.  Data class uses this information to process SQL statements
 	protected $db;
 	protected $table = 'groups';
@@ -23,7 +23,7 @@ class group extends data {
 	protected $sortFields = array(0);
 	protected $params = array();
 	protected $numParams = 15;
-	
+
 	// Store all inputs into members
 	protected function parseInput($inputs) {
 		if (is_null($inputs)) {	// If no inputs, then start with empty members
@@ -49,7 +49,7 @@ class group extends data {
 			$this->notes = new notes($inputs[12]);
 			$this->active = new active($inputs[13]);
 			$this->probation = new probation($inputs[14]);
-			
+
 			// Store the parameters used for SQL statements from the members
 			$this->params[0] = $this->name->getValue();
 			$this->params[1] = $this->dow->getValue();
@@ -62,7 +62,7 @@ class group extends data {
 			$this->params[8] = $this->probation->getValue();
 		}
 	}
-	
+
 	// Parse results from SQL view function into group members.  Note that this
 	// will overwrite any members defined in the constructor
 	protected function parseOutput() {
@@ -76,7 +76,7 @@ class group extends data {
 		$this->active = new active($this->params[7]);
 		$this->probation = new probation($this->params[8]);
 	}
-	
+
 	// Do the same with arrays for viewall.  Note that these have to be different
 	// names from the members, otherwise it will overwrite them
 	protected function parseOutputs() {
@@ -90,7 +90,7 @@ class group extends data {
 		$this->actives[] = new active($this->params[7]);
 		$this->probations[] = new probation($this->params[8]);
 	}
-	
+
 	// Public 'get' functions to grab individual members
 	public function getName() {
 		return $this->name;
@@ -103,7 +103,7 @@ class group extends data {
 	}
 	public function getBG() {
 		return $this->bg;
-	}	
+	}
 	public function getRep() {
 		return $this->rep;
 	}
@@ -119,7 +119,7 @@ class group extends data {
 	public function getProbation() {
 		return $this->probation;
 	}
-	
+
 	// Debugging code to output members.  Possibly depricated.
 	public function output() {
 		echo $this->id . '<br>';
@@ -133,7 +133,7 @@ class group extends data {
 		echo '&nbsp&nbsp' . $this->active->getFormatted() . '<br>';
 		echo '&nbsp&nbsp' . $this->probation->getFormatted() . '<br>';
 	}
-	
+
 	// HTML for form page.  Uses pre-made HTML scripts of members from datatypes.php
 	public function inputHTML($idBase, $nameBase, $enabled) {
 		echo '
@@ -148,49 +148,49 @@ class group extends data {
 		echo '<br>';
 		$this->name->inputHTML($idBase, $nameBase, $enabled);
 		echo '</p>';
-		
+
 		echo '<p>';
 		$this->dow->inputHTMLcheckbox($idBase, $nameBase, $enabled);
-		echo '</p>';	
+		echo '</p>';
 
 		echo '<p>';
 		$this->gender->labelHTML($idBase, 'Select a gender:');
 		echo '<br>';
 		$this->gender->inputHTML($idBase, $nameBase, $enabled);
 		echo '</p>';
-		
+
 		echo '<p>';
 		$this->bg->inputHTML($idBase, $nameBase, $enabled);
 		$this->bg->labelHTML($idBase, 'Permits Background Checks');
 		echo '</p>';
-		
+
 		echo '<p>';
 		$this->active->inputHTML($idBase, $nameBase, $enabled);
 		$this->active->labelHTML($idBase, 'Group Active');
 		echo '</p>';
-		
+
 		echo '<p>';
 		$this->probation->inputHTML($idBase, $nameBase, $enabled);
 		$this->probation->labelHTML($idBase, 'Group On Probation');
 		echo '</p>';
-		
+
 		echo '<p>';
 		$this->notes->labelHTML($idBase, 'Notes:');
 		echo '<br>';
 		$this->notes->inputHTML($idBase, $nameBase, $enabled);
 		echo '</p>';
-		
+
 		echo '
-		
+
 			</div>';
 	}
-	
+
 	// Hidden HTML field for ID, for passing on to load.php
 	private function idHTML($idBase, $nameBase) {
 		echo '
 				<input type="hidden" id="' . $idBase . '[id]" name="' . $nameBase . '[id]" value="' . $this->id . '">';
 	}
-	
+
 	// Simple tabular code for displaying a group in view.php
 	public function outputHTML($public) {
 		// Display HTML
@@ -239,7 +239,7 @@ class group extends data {
 					<td>
 						' . $this->gender->getFormatted() . '
 					</td>
-				</tr>		
+				</tr>
 				<tr>
 					<td>
 						<b>Permits background checks:</b>
@@ -328,7 +328,7 @@ class group extends data {
 					</td>
 				</tr>';
 		}
-				
+
 		// Second rep display
 
 		// only display if rep is present:
@@ -391,15 +391,15 @@ class group extends data {
 			echo '
 			<a class="button" href="form.php?id=' . $this->id . '">Edit</a>
 			<a class="button" href="form.php">Add New</a>
-			<a class="button" href="../assignments/viewall.php?group=' . $this->id . '">Assignments</a>	
+			<a class="button" href="../assignments/viewall.php?group=' . $this->id . '">Assignments</a>
 		</body>
 		</html>';
 		}
 	}
-	
+
 	// Function to display outputs if using viewall.php in a table
 	public function outputsHTML() {
-	
+
 		// Header HTML (include tables.css)
 		include('header.php');
 		echo '

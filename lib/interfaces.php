@@ -11,13 +11,13 @@ the classes to certain public functions.
 // primitive, which is extended by 'datatypes' has a getValue and getFormatted function.  They are
 // how they sound: the getValue returns the raw data value whereas getFormatted is for output
 interface primitive {
-	
+
 	function __construct();
-		
+
 	public function getValue();
-	
+
 	public function getFormatted();
-	
+
 }
 
 // This is strictly for the datatypes classes and makes sure that there is HTML code for input controls
@@ -25,11 +25,11 @@ interface primitive {
 // for each function.  idBase: root string for HTMNL element ids.  namBase: likewise with names.  label:
 // output label for the element
 interface HTML {
-	
+
 	public function labelHTML($idBase, $label);
-	
+
 	public function inputHTML($idBase, $nameBase, $enabled);
-	
+
 	//public function outputHTML();
 
 }
@@ -37,13 +37,13 @@ interface HTML {
 // day of the week has different HTML based on whether multiple days of the week are allowed or not.  For instance:
 // an institution meeting can only meet one day of the week, whereas a group could meet every day if they wanted.
 interface dowHTML {
-	
+
 	public function labelHTMLpulldown($idBase, $label);
-	
+
 	public function inputHTMLpulldown($idBase, $nameBase, $enabled);
-	
+
 	public function inputHTMLcheckbox($idBase, $nameBase, $enabled);
-	
+
 	//public function outputHTML();
 
 }

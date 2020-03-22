@@ -23,13 +23,13 @@ if(isset($_GET['id'])) {
   
 	// Grab ID
 	$meetingID = $_GET['id'];
-	
+
 	// Initiate meeting
 	$meeting = new meeting($db, $meetingID);
-	
+
 	// Fill the information from the db
 	$meeting->view();
-	
+
 	// Set title
 	$title = 'Edit meeting';
 }
@@ -37,9 +37,9 @@ if(isset($_GET['id'])) {
 else {
 
 	$meetingID = null;
-	
+
 	$meeting = new meeting($db);
-	
+
 	$title = 'Add new meeting';
 }
 
@@ -106,7 +106,7 @@ echo '
 				<a class="button" href = "viewall.php">Meetings</a>
 			</p>
 		</div>
-		<div class="col-lg-9 col-md-8" style="text-align: center;">	
+		<div class="col-lg-9 col-md-8" style="text-align: center;">
 		</div>
 	</div>
 	<div class="row">

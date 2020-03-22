@@ -49,8 +49,8 @@ foreach($rows as $row) {
 		$row["DOW"]->getFormatted() . 	', ' . $row["Time"]->getFormatted() . ' at ' . 
 		$row["Name"] . ', ' . $row["Gender"]->getFormatted() . ')
 	</a>
-</p>';	
-		
+</p>';
+
 }
 
 echo '

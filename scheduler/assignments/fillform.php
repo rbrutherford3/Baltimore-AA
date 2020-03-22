@@ -23,7 +23,7 @@ if ($stmtDate->execute()) {
 
 // Only proceed if a most recent assignment date was found
 if ($queryDateSuccess) {
-		
+
 	$lastMonth = new DateTime($lastDate);
 	// Make sure month being given is the most recent month worth of assignments, otherwise it could cause problems
 	if (((int)$lastMonth->format('n')==(int)$month) && ((int)$lastMonth->format('Y')==(int)$year)) {
@@ -32,8 +32,8 @@ if ($queryDateSuccess) {
 			<title>Institution Committee - Assignment Creation Tool</title>
 			</head>
 			<body>';
-			
-		// Start form	
+
+		// Start form
 		echo '
 			<form name="form" action="fill.php" method="post">
 			<input type="hidden" name="month" value="' . $month . '">
@@ -44,7 +44,7 @@ if ($queryDateSuccess) {
 			<h1>Assignment Creation Tool</h1>
 			<p>
 			Automatic group assignment stage (2 of 2) - <b>' . $lastMonth->format('F Y') . '</b></p><br>';
-		
+
 		// Select history in months, default 12 months (explained below in output)
 		echo '
 			<h2>History:</h2>
@@ -58,7 +58,7 @@ if ($queryDateSuccess) {
 		echo '
 				</select>
 			</p>
-			<br>';	
+			<br>';
 
 		// Navigation buttons
 		echo '

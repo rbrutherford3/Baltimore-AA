@@ -201,7 +201,7 @@ function mirrorDB($db, $sqlDump) {
 		//Print the table name out onto the page.
 		$sqlDrops[] =  "DROP TABLE IF EXISTS " . $table[0] . ";";
 	}
-	
+
 	// Execute table drops
 	foreach($sqlDrops as $sqlDrop) {
 		$stmtDrop = $db->prepare($sqlDrop);
@@ -214,14 +214,14 @@ function mirrorDB($db, $sqlDump) {
 	$stmtTransfer = $db->prepare($sqlTransfer);
 	$stmtTransfer->execute();
 	$stmtTransfer->closeCursor();
-	
-	// Censor personal information	
+
+	// Censor personal information
 	$sqlPeoples[] = "UPDATE `people` SET `Name`='John' WHERE `ID`%2=0;";
 	$sqlPeoples[] = "UPDATE `people` SET `Name`='Jane' WHERE `ID`%2=1;";
 	$sqlPeoples[] = "UPDATE `people` SET `Initial`='D';";
 	$sqlPeoples[] = "UPDATE `people` SET `Phone`=4105555555;";
 	$sqlPeoples[] = "UPDATE `people` SET `Notes`=NULL;";
-	
+
 	// Execute censoring
 	foreach($sqlPeoples as $sqlPeople) {
 		$stmtPeople = $db->prepare($sqlPeople);

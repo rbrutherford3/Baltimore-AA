@@ -68,7 +68,7 @@ if ($stmtAssignments->execute()) {
 		$gender = $rowAssignments['Gender'];
 		$dow = new dow($rowAssignments['DOW']);
 		$dowN = $dow->getValue();
-		
+
 		// Set up Groups SQL
 		if ($bg) {
 			$bgSQL = "AND BG ";
@@ -86,19 +86,19 @@ if ($stmtAssignments->execute()) {
 			$genderSQL = "";
 		}
 		$found = false;
-		
+
 		// Set up previous month (to prioritize based on who was last on standby)
 		$pastMonthYear = clone $createMonthYear;
 		$pastMonthYear->modify('-1 months');
 		$pastMonth = (int)$pastMonthYear->format('n');
 		$pastYear = (int)$pastMonthYear->format('Y');
-		
+
 		// Loop back through time until a qualifying group is found
 		// (back in time --> search through last month's standbys, then the previous months, etc.)
 		$count = 0;
 		do {
 			$count++;
-			
+
 			// The crux of this query is select a group at random that is compatible with the meeting
 			// (in terms of background check, gender, and day of week) that was not already assigned for
 			// this month, or the 'standby' month in question (goes farther back each loop)
@@ -145,10 +145,10 @@ if ($stmtAssignments->execute()) {
 				$group = $rowGroups['ID'];
 				$found = true;
 			}
-			
+
 			// If a group wasn't found, search a month further back
 			else {
-				
+
 				// Don't go back further than 12 months (means something is wrong)
 				if ($count > 12) {
 					//echo '<b><i>FAILED TO FIND MATCHING MEETING!!!</b></i><br>';
@@ -161,7 +161,7 @@ if ($stmtAssignments->execute()) {
 			}
 		} while (!$found);	// loop until matching group is found or count of 12 is met or exceeded
 
-		
+
 		// Update the assignment with the matching group!
 		$sqlAssignment = "UPDATE assignments SET `Group`=:group WHERE `ID`=:assignment;";
 		$stmtAssignment = $db->prepare($sqlAssignment);
@@ -176,5 +176,5 @@ echo '
 	<script>
 	window.location = "viewall.php?month=' . $month . '&year=' . $year . '";
 	</script>';
-	
+
 ?>

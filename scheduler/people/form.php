@@ -22,13 +22,13 @@ if(isset($_GET['id'])) {
   
 	// Grab ID
 	$personID = $_GET['id'];
-	
+
 	// Initiate person
 	$person = new person($db, $personID);
-	
+
 	// Fill the information from the db
 	$person->view();
-	
+
 	// Set title
 	$title = 'Edit ' . $person->getName()->getFormatted() . $person->getInitial()->getFormatted();
 }
@@ -36,9 +36,9 @@ if(isset($_GET['id'])) {
 else {
 
 	$personID = null;
-	
+
 	$person = new person($db);
-	
+
 	$title = 'Add new person';
 }
 
@@ -64,14 +64,14 @@ echo '<a class="button" href = "../" style="margin-top: 10px;">Home</a>';
 echo '<a class="button" href = "viewall.php">People</a>';
 echo '</p>';
 echo '</div>';
-echo '<div class="col-lg-9 col-md-8" style="text-align: center;">';	
+echo '<div class="col-lg-9 col-md-8" style="text-align: center;">';
 echo '</div>';
 echo '</div>';
 echo '<div class="row">';
 echo '<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
 $person->inputHTMLSimple($personBase, $personBase, 'AA member');
 echo '</div>';
-echo '<div class="col-lg-9 col-md-8" style="text-align: center;">';	
+echo '<div class="col-lg-9 col-md-8" style="text-align: center;">';
 echo '</div>';
 echo '</div>';
 echo '<div class="row">';
@@ -80,7 +80,7 @@ echo '<p>';
 echo '<input type="submit" value="Submit">';
 echo '</p>';
 echo '</div>';
-echo '<div class="col-lg-9 col-md-8" style="text-align: center;">';	
+echo '<div class="col-lg-9 col-md-8" style="text-align: center;">';
 echo '</div>';
 echo '</div>';
 echo '</div>

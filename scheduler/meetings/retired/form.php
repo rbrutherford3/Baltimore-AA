@@ -9,7 +9,7 @@ if(isset($_GET['id'])) {
 	$newMeeting = false;
 
 	$meetingID = $_GET['id'];
-	
+
 	// Grab group info to be edited
 	$stmt = $db->prepare("SELECT DisplayID, Institution AS InstitutionID, i.Name AS InstitutionName, Address, City, Zip, BG, DOW, Time, Gender, m.Active AS MeetingActive,  
 		NotesPublic, NotesPrivate, i.Notes AS InstitutionNotes, 
@@ -25,18 +25,18 @@ if(isset($_GET['id'])) {
 		WHERE m.ID=:meetingID;");
 	$stmt->bindValue(':meetingID', $meetingID, PDO::PARAM_INT);
 	$stmt->execute();
-	
+
 	// Grab data if group exists
 	if ($row = $stmt->fetch()) {
-		
+
 		// Grab display ID
 		$meetingDisplayID= $row['DisplayID'];
-		
+
 		// Grab institution ID
 		$institutionID = $row['InstitutionID'];
-		
+
 		// Check for each day of week and enable checkmark if group meets that day
-		for($i=0; $i<7; $i++) {	
+		for($i=0; $i<7; $i++) {
 			if($dowsN[$i] & $row['DOW']) {	// bitmask: "does group meet this day of week?"
 				$dow[$i] = ' selected="selected"';
 			}
@@ -44,11 +44,11 @@ if(isset($_GET['id'])) {
 				$dow[$i] = '';
 			}
 		}
-		
+
 		// Format meeting time
 		$meetingTime = strtotime($row['Time']);
 		$meetingTime = date('H:i', $meetingTime);
-		
+
 		// Check for each gender possibility and select the appropriate one for the pulldown menu
 		for($i=0; $i<3; $i++) {
 			if ($i==$row['Gender']) {
@@ -58,7 +58,7 @@ if(isset($_GET['id'])) {
 				$gender[$i] = '';
 			}
 		}
-		
+
 		// Check for the group active field and check the box if it is true
 		if ($row['MeetingActive']) {
 			$meetingActive = ' checked';
@@ -66,17 +66,17 @@ if(isset($_GET['id'])) {
 		else {
 			$meetingActive = '';
 		}
-		
+
 		// Grab meeting notes (public and private)
 		$meetingNotesPublic = htmlspecialchars($row['NotesPublic']);
 		$meetingNotesPrivate = htmlspecialchars($row['NotesPrivate']);
-		
+
 		// Grab institution notes (private)
 		$institutionNotes = htmlspecialchars($row['InstitutionNotes']);
-		
+
 /*  		// Grab rep ID
 		$repID = $row['RepID']; */
-		
+
 		// If there's no institution, then fill empty info and set button defaults
 		if(is_null($institutionID)) {
 			$institutionName = '';
@@ -86,7 +86,7 @@ if(isset($_GET['id'])) {
 			$bg = '';
 			$addNewInstitutionChecked = ' checked';
 		}
-		
+
 		// If there's an institution, then fill info and set button defaults
 		else {
 			$institutionName = htmlspecialchars($row['InstitutionName']);
@@ -100,9 +100,9 @@ if(isset($_GET['id'])) {
 				$bg = '';
 			}
 			$addNewInstitutionChecked = '';
-			$editExistingInstitutionChecked = ' checked';			
+			$editExistingInstitutionChecked = ' checked';
 		}
-		
+
 	// Send to "add a meeting" page if no group is found
 	} else {
 		echo '<script type="text/javascript">';
@@ -111,7 +111,7 @@ if(isset($_GET['id'])) {
 		echo '</script>';
 		die('Forwarding...');
 	}
-	
+
 	// Set title
 	$title = 'Institution Committee - Edit "' . $institutionName . '" Meeting';
 	$header = 'Edit Meeting';
@@ -120,51 +120,51 @@ if(isset($_GET['id'])) {
 // Adding group if no ID provided
 else {
 	$newMeeting = true;
-	
+
 	// Set ID to null (this will signify a new entry on load php page);
 	$meetingID = null;
-	
+
 	// Set Display ID to null
 	$meetingDisplayID = null;
-	
+
 	// Set ID to null (this will signify a new entry on load php page);
 	$institutionID = null;
-			
+
 	// Start with blank institution name
 	$institutionName = '';
-	
+
 	// Start with blank institution address
 	$institutionAddress = '';
 	$institutionCity = '';
 	$institutionZip = '';
-	
+
 	// Default to "doesn't require background check
 	$bg = '';
-	
+
 	// Start with blank days of week
-	for($i=0; $i<7; $i++) {	
+	for($i=0; $i<7; $i++) {
 		$dow[$i] = '';
 	}
-	
+
 	// Start with blank meeting time
 	$meetingTime = '';
-	
+
 	// Default to 'All genders'
 	$gender[0] = ' selected="selected"';
 	$gender[1] = '';
 	$gender[2] = '';
-	
+
 	// Default to meeting active
 	$meetingActive = ' checked';
-	
+
 	// Start with blank notes
 	$meetingNotesPublic = '';
 	$meetingNotesPrivate = '';
 	$institutionNotes = '';
-	
+
 	// Set input defaults
 	$addNewInstitutionChecked = ' checked';
-		
+
 	// Set title
 	$title = 'Institution Committee - Add New Meeting';
 	$header = 'Add New Meeting';
@@ -209,15 +209,15 @@ echo '
 // Begin form HTML
 echo'
 	<form action="load" name="meetingForm" onsubmit="return validateForm()" method="post">';
-		
+
 // Meeting ID
 echo '
-		<input type="hidden" id="MeetingID" name="meetingID" value="' . $meetingID . '" />';		
-	
+		<input type="hidden" id="MeetingID" name="meetingID" value="' . $meetingID . '" />';
+
 // Old Display ID
 echo '
-		<input type="hidden" id="eetingOldDisplayID" name="meetingOldDisplayID" value="' . $meetingDisplayID . '" />';			
-	
+		<input type="hidden" id="eetingOldDisplayID" name="meetingOldDisplayID" value="' . $meetingDisplayID . '" />';
+
 // Meeting ID html
 echo '
 		<b>ID:</b>
@@ -225,7 +225,7 @@ echo '
 		<input type="number" name="meetingNewDisplayID"  min="100" max="799" value="' . $meetingDisplayID . '" maxlength="3" />
 		<br>';
 
-	
+
 // Days of week form HTML
 echo '
 		<br>
@@ -260,12 +260,12 @@ echo '
 			<option value="1"' . $gender[1] . '>Men only</option>
 			<option value="2"' . $gender[2] . '>Women only</option>
 		</select><br><br>';
-	
+
 // Meeting active check form HTML
 echo '
 		<b><input type="checkbox" id="meetingActive" name="meetingActive"' . $meetingActive . ' />
 		<label for="meetingActive">Meeting active (currently accepting meeting assignments)</label></b>
-		<br>';			
+		<br>';
 
 // Meeting notes
 echo '
@@ -278,22 +278,22 @@ echo '
 		<b>Private Notes:</b>
 		<br>
 		<textarea name="meetingNotesPrivate" rows="4" cols="53">' . $meetingNotesPrivate . '</textarea>
-		<br>		
 		<br>
-		<hr align="left" width="800px">';	
+		<br>
+		<hr align="left" width="800px">';
 
 // Institution ID html
 echo '
-		<input type="hidden" id="InstitutionID" name="institutionID" value="' . $institutionID . '">';		
+		<input type="hidden" id="InstitutionID" name="institutionID" value="' . $institutionID . '">';
 
 // Institution add/edit/select options
 	echo '
 			<h2>Institution</h2>
 			<table>';
-			
-// If institutions are in the database, then show the pulldown menu			
+
+// If institutions are in the database, then show the pulldown menu
 if ($foundInstitutions) {
-echo '	
+echo '
 				<tr>
 					<td>';
 	// Selection for pull-down menu
@@ -304,8 +304,8 @@ echo '
 						<i><b><label for="SelectExistingInstitution">Select from list:</label></b></i>
 					</td>
 					<td colspan="3">';
-				
-			
+
+
 	// Institution pull-down menu
 	echo '
 						<select id="InstitutionSelect" name="institutionIDSelect" disabled>
@@ -316,7 +316,7 @@ echo '
 		echo'
 							<option value=' . $institutionIDs[$i] . ' ' . $institutionChecked[$i] . '>' . 
 								$institutionNames[$i] . ' - ' . $institutionAddresses[$i] . ', ' . $institutionCities[$i] . 
-							'</option>';	
+							'</option>';
 	}
 	echo '
 						</select>
@@ -324,7 +324,7 @@ echo '
 				</tr>';
 }
 
-// Add/Select options		
+// Add/Select options
 echo '
 			<tr>
 				<td colspan="5" height="10px" />
@@ -352,9 +352,9 @@ echo '
 				</td>
 			</tr>
 		</table>';
-		
 
-	
+
+
 // Institution name
 echo '
 		<br>
@@ -389,17 +389,17 @@ echo '
 		<br>
 		<textarea id="InstitutionNotes" name="institutionNotes" rows="4" cols="53">' . $institutionNotes . '</textarea>
 		<br>';
-			
+
 /* // Group ID html
 echo '
 		<input type="hidden" name="groupID" value="' . $groupID . '">';
-			
+
 // Rep ID html
 echo '
 		<input type="hidden" id="RepID" name="repID" value="' . $repID . '">'; */
-			
+
 // Rep HTML
-/* echo '		
+/* echo '
 		<br>
 		<b>Representative:</b><br><br>
 		<table frame="box" style="padding: 10px;">
@@ -473,7 +473,7 @@ echo '
 					&nbsp
 				</td>
 			</tr>';
-			
+
 // If people are in the database, then show the pulldown menu
 if ($foundPeople) {
 	echo '
@@ -494,17 +494,17 @@ if ($foundPeople) {
 							<option value=' . $repIDs[$i] . ' ' . $repChecked[$i] . '>' . 
 								$repNames[$i] . ' ' . $repInitials[$i] . ' - (' . 
 								$repPhones1[$i] . ') ' . $repPhones2[$i] . '-' . $repPhones3[$i] . 
-							'</option>';	
+							'</option>';
 	}
 	echo '
-					</select>		
+					</select>
 				</td>
 			</tr>';
 }
 echo '
 		</table>'; */
-			
-			
+
+
 // Buttons and end of form and page
 echo '
 		<br>

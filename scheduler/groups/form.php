@@ -21,13 +21,13 @@ if(isset($_GET['id'])) {
   
 	// Grab ID
 	$groupID = $_GET['id'];
-	
+
 	// Initiate group
 	$group = new group($db, $groupID);
-	
+
 	// Fill the information from the db
 	$group->view();
-	
+
 	// Set title
 	$title = 'Edit "' . $group->getName()->getFormatted() . '"';
 }
@@ -35,9 +35,9 @@ if(isset($_GET['id'])) {
 else {
 
 	$groupID = null;
-	
+
 	$group = new group($db);
-	
+
 	$title = 'Add new group';
 }
 
@@ -50,7 +50,7 @@ echo '
 	<script type="text/javascript" src="' . $libloc . 'secondbuttons.js"></script>
 	<script type="text/javascript" src="validate.js"></script>
 	<script type="text/javascript" src="' . $libloc . 'validate.js"></script>
-	
+
 	<title>Institution Committee - ' . $title . '</title>
 </head>
 <body>
@@ -88,7 +88,7 @@ echo '
 				<a class="button" href = "viewall.php">Groups</a>
 			</p>
 		</div>
-		<div class="col-lg-9 col-md-8" style="text-align: center;">	
+		<div class="col-lg-9 col-md-8" style="text-align: center;">
 		</div>
 	</div>
 	<div class="row">
@@ -96,7 +96,7 @@ echo '
 			$group->inputHTML($groupBase,$groupBase,true);
 echo '
 		</div>
-		<div class="col-lg-9 col-md-8" style="text-align: center;">	
+		<div class="col-lg-9 col-md-8" style="text-align: center;">
 		</div>
 	</div>
 	<div class="row">

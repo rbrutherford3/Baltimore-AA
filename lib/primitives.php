@@ -16,13 +16,13 @@ class flag implements primitive {
 	protected $falseFormatted = 'No';
 	protected $defaultValue = null;
 	protected $className = 'flag';
-	
+
 	function __construct() {
 		if (func_num_args() == 0) {
 			$this->value = $this->defaultValue;
 			$this->format();
 		}
-		
+
 		else if (func_num_args() == 1) {
 			$this->value = func_get_arg(0);
 			$this->format();
@@ -31,7 +31,7 @@ class flag implements primitive {
 			die('Invalid number of arguments for ' . $this->className . ' class!');
 		}
 	}
-	
+
 	// Set to true if number greater than zero or non-empty string
 	protected function format() {
 		if ($this->value || !(empty($this->value))) {
@@ -43,11 +43,11 @@ class flag implements primitive {
 			$this->formatted = $this->falseFormatted;
 		}
 	}
-	
+
 	public function getValue() {
 		return $this->value;
 	}
-	
+
 	public function getFormatted() {
 		return $this->formatted;
 	}
@@ -67,13 +67,13 @@ class text implements primitive {
 		else if (func_num_args() == 1) {
 			$this->value = func_get_arg(0);
 			$this->format();
-			
+
 		}
 		else {
 			die('Invalid number of arguments for ' . $this->className . ' class!');
 		}
 	}
-	
+
 	// Nullify empty strings, format non-empty strings
 	protected function format() {
 		if (empty($this->value) || is_null($this->value)) {
@@ -84,11 +84,11 @@ class text implements primitive {
 			$this->formatted = htmlspecialchars($this->value);
 		}
 	}
-	
+
 	public function getValue() {
 		return $this->value;
 	}
-	
+
 	public function getFormatted() {
 		return $this->formatted;
 	}
@@ -114,7 +114,7 @@ class number implements primitive {
 			die('Invalid number of arguments for ' . $this->className . ' class!');
 		}
 	}
-	
+
 	// Nullify empty strings, format non-empty strings
 	protected function format() {
 		if (empty($this->value) || is_null($this->value)) {
@@ -125,12 +125,12 @@ class number implements primitive {
 			$this->formatted = htmlspecialchars((string)$this->value);
 		}
 	}
-	
+
 	// Return formatted notes
 	public function getValue() {
 		return $this->value;
 	}
-	
+
 	public function getFormatted() {
 		return $this->formatted;
 	}

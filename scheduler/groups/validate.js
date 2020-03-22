@@ -6,7 +6,7 @@ Calls validate.js in lib
 function validateForm(formName, groupBase, rep1Base, rep2Base) {
 	// Validate group (just validate day of week)
 	groupValid = validateGroup(formName, groupBase);
-	
+
 	// Valid rep1
 	rep1Valid = validatePerson(formName, rep1Base);
 
@@ -17,7 +17,7 @@ function validateForm(formName, groupBase, rep1Base, rep2Base) {
 	else {
 		rep2Valid = true;
 	}
-	
+
 	// Return combined validations
 	return (groupValid && rep1Valid && rep2Valid);
 }

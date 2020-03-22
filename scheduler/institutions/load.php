@@ -19,7 +19,7 @@ if (isset($_POST[$institutionBase]['id'])) {	// Update db if editing
 	$institution = new institution($db, $_POST[$institutionBase]['name'], $_POST[$institutionBase]['address'], 
 		$_POST[$institutionBase]['city'], $_POST[$institutionBase]['zip'], isset($_POST[$institutionBase]['bg']), 
 		$_POST[$institutionBase]['notesPublic'], $_POST[$institutionBase]['notes'], isset($_POST[$institutionBase]['active']), $_POST[$institutionBase]['id']);
-	
+
 	// Check to see that information isn't conflicting with another record
 	if ($institution->checkExistsExcluding()) {
 		echo '
@@ -29,7 +29,7 @@ if (isset($_POST[$institutionBase]['id'])) {	// Update db if editing
 			window.location = "form.php?id=' . $institution->getID() . '";
 			</script>';
 	}
-	
+
 	// Update otherwise
 	else {
 		$institution->update();	// (add handling for false results?)
@@ -41,7 +41,7 @@ else { // Insert into db if adding
 	$institution = new institution($db, $_POST[$institutionBase]['name'], $_POST[$institutionBase]['address'], 
 		$_POST[$institutionBase]['city'], $_POST[$institutionBase]['zip'], isset($_POST[$institutionBase]['bg']), 
 		$_POST[$institutionBase]['notesPublic'], $_POST[$institutionBase]['notes'], isset($_POST[$institutionBase]['active']));
-		
+
 	// Check to see that information isn't already in db
 	if ($institution->checkExists()) {
 		echo '

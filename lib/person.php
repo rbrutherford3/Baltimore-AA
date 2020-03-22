@@ -9,7 +9,7 @@ include_once 'data.php';
 
 // Person class holds all the information and methods for a group
 class person extends data {
-	
+
 	// Define all default properties.  Data class uses this information to process SQL statements
 	protected $db;
 	protected $table = 'people';
@@ -20,7 +20,7 @@ class person extends data {
 	protected $sortFields = array(0, 1);
 	protected $params = array();
 	protected $numParams = 7;
-	
+
 	// Store all inputs into members
 	protected function parseInput($inputs) {
 		if (is_null($inputs)) { // If no inputs, then start with empty members
@@ -37,7 +37,7 @@ class person extends data {
 			$this->phone = new phone($inputs[2], $inputs[3], $inputs[4]);
 			$this->notes = new notes($inputs[5]);
 			$this->active = new active($inputs[6]);
-			
+
 			// Store the parameters used for SQL statements from the members
 			$this->params[0] = $this->name->getValue();
 			$this->params[1] = $this->initial->getValue();
@@ -46,7 +46,7 @@ class person extends data {
 			$this->params[4] = $this->active->getValue();
 		}
 	}
-	
+
 	// Parse results from SQL view function into person members.  Note that this
 	// will overwrite any members defined in the constructor
 	protected function parseOutput() {
@@ -56,7 +56,7 @@ class person extends data {
 		$this->notes = new notes($this->params[3]);
 		$this->active = new active($this->params[4]);
 	}
-	
+
 	// Do the same with arrays for viewall.  Note that these have to be different
 	// names from the members, otherwise it will overwrite them
 	protected function parseOutputs() {
@@ -66,7 +66,7 @@ class person extends data {
 		$this->notess[] = new notes($this->params[3]);
 		$this->actives[] = new active($this->params[4]);
 	}
-	
+
 	// Public 'get' functions to grab individual members
 	public function getName() {
 		return $this->name;
@@ -83,7 +83,7 @@ class person extends data {
 	public function getActive() {
 		return $this->active;
 	}
-	
+
 	// Debugging code to output members.  Possibly depricated.
 	public function output() {
 		echo $this->getID() . '<br>';
@@ -92,7 +92,7 @@ class person extends data {
 		echo '&nbsp&nbsp' . $this->getNotes()->getFormatted() . '<br>';
 		echo '&nbsp&nbsp' . $this->getActive()->getFormatted() . '<br>';
 	}
-	
+
 	// Debugging code to output array members.  Possibly depricated.
 	public function outputs() {
 		for ($i=0; $i<$this->total; $i++) {
@@ -103,7 +103,7 @@ class person extends data {
 			echo '&nbsp&nbsp' . $this->actives[$i]->getFormatted() . '<br>';
 		}
 	}
-	
+
 	// HTML for form page.  Uses pre-made HTML scripts of members from datatypes.php
 	// Note that this class has three different options: add, edit, and select, as it is
 	// always used in conjunction with another class, so it must have its input methods
@@ -118,9 +118,9 @@ class person extends data {
 		echo '
 			<div class="person" ' . $visibleTag . ' id="' . $idBase . '">
 			<center><h2>' . strtoupper($title) . '</h2></center>';
-		
+
 			echo $this->titleHTML($idBase, $nameBase, $title);
-		
+
 		if (is_null($this->id)) {
 			echo '<p>';
 			$this->addButton($idBase, $nameBase, true);
@@ -134,40 +134,40 @@ class person extends data {
 			$this->editButton($idBase, $nameBase, true);
 			echo '</p>';
 		}
-			
-		
+
+
 		echo '<p>';
 		$this->name->labelHTML($idBase, 'Name:');
 		echo '<br>';
 		$this->name->inputHTML($idBase, $nameBase, $visible);
 		echo '</p>';
-		
+
 		echo '<p>';
 		$this->initial->labelHTML($idBase, 'Last Initial:');
 		echo '<br>';
 		$this->initial->inputHTML($idBase, $nameBase, $visible);
-		echo '</p>';	
+		echo '</p>';
 
 		echo '<p>';
 		$this->phone->labelHTML($idBase, 'Phone Number:');
 		echo '<br>';
 		$this->phone->inputHTML($idBase, $nameBase, $visible);
 		echo '</p>';
-		
+
 		echo '<p>';
 		$this->active->inputHTML($idBase, $nameBase, $visible);
 		$this->active->labelHTML($idBase, 'Person Active');
 		echo '</p>';
 
-		echo '<p>';		
+		echo '<p>';
 		$this->notes->labelHTML($idBase, 'Notes:');
 		echo '<br>';
 		$this->notes->inputHTML($idBase, $nameBase, $visible);
-		echo '</p>';		
+		echo '</p>';
 		echo '<hr>';
-		echo '<p>';		
+		echo '<p>';
 		$this->selectButton($idBase, $nameBase, false);
-		echo '</p>';		
+		echo '</p>';
 		echo '<p>';
 		$this->pulldownHTML($idBase, $nameBase, false);
 		echo '</p>';
@@ -178,63 +178,63 @@ class person extends data {
 			personbuttons("' . $idBase . '");
 			</script>';
 	}
-	
+
 	// Simple version of the input HTML (complex version above)
 	public function inputHTMLSimple($idBase, $nameBase, $title) {
 		echo '
 			<div class="person" id="' . $idBase . '">
 			<center><h2>AA MEMBER</h2></center>';
-			
+
 		echo $this->titleHTML($idBase, $nameBase, $title);
-			
+
 		if (!(is_null($this->id))) {	// Only use hidden HTML ID field if not empty
 			echo $this->idHTML($idBase, $nameBase);
 		}
-		
+
 		echo '<p>';
 		$this->name->labelHTML($idBase, 'Name:');
 		echo '<br>';
 		$this->name->inputHTML($idBase, $nameBase, true);
 		echo '</p>';
-		
+
 		echo '<p>';
 		$this->initial->labelHTML($idBase, 'Last Initial:');
 		echo '<br>';
 		$this->initial->inputHTML($idBase, $nameBase, true);
-		echo '</p>';	
+		echo '</p>';
 
 		echo '<p>';
 		$this->phone->labelHTML($idBase, 'Phone Number:');
 		echo '<br>';
 		$this->phone->inputHTML($idBase, $nameBase, true);
 		echo '</p>';
-		
+
 		echo '<p>';
 		$this->active->inputHTML($idBase, $nameBase, true);
 		$this->active->labelHTML($idBase, 'Person Active');
 		echo '</p>';
 
-		echo '<p>';		
+		echo '<p>';
 		$this->notes->labelHTML($idBase, 'Notes:');
 		echo '<br>';
 		$this->notes->inputHTML($idBase, $nameBase, true);
-		echo '</p>';	
+		echo '</p>';
 		echo '
 			</div>';
-	}	
-	
+	}
+
 	// Hidden HTML field for ID, for passing on to load.php
 	private function idHTML($idBase, $nameBase) {
 		echo '
 					<input type="hidden" id="' . $idBase . '[id]" name="' . $idBase . '[id]" value="' . $this->id . '">';
 	}
-	
+
 	// Hidden HTML field for title, not used, might be eliminated
 	private function titleHTML($idBase, $nameBase, $title) {
 		echo '
 					<input type="hidden" id="' . $idBase . '[title]" name="' . $idBase . '[title]" value="' . $title . '">';
 	}
-	
+
 	// HTML for button to add new person
 	private function addButton($idBase, $nameBase, $selected) {
 		if ($selected) {
@@ -242,12 +242,12 @@ class person extends data {
 		}
 		else {
 			$selectedTag = '';
-		}		
+		}
 		echo '
 					<input type="radio" id="' . $idBase . '[add]" value="1" name="' . $nameBase . '[method]"' . $selectedTag . '>
 					<b><label for="' . $idBase . '[add]">Add new person</label></b>';
 	}
-	
+
 	// HTML for button to edit existing person
 	private function editButton($idBase, $nameBase, $selected) {
 		if ($selected) {
@@ -255,12 +255,12 @@ class person extends data {
 		}
 		else {
 			$selectedTag = '';
-		}			
+		}
 		echo '
 					<input type="radio" id="' . $idBase . '[edit]" value="2" name="' . $nameBase . '[method]"' . $selectedTag . '>
 					<b><label for="' . $idBase . '[edit]">Edit existing person</label></b>';
 	}
-	
+
 	// HTML for option to select existing person from a pulldown menu
 	private function selectButton($idBase, $nameBase, $selected) {
 		if ($selected) {
@@ -268,12 +268,12 @@ class person extends data {
 		}
 		else {
 			$selectedTag = '';
-		}			
+		}
 		echo '
 					<input type="radio" id="' . $idBase . '[select]" value="3" name="' . $nameBase . '[method]"' . $selectedTag . '>
 					<b><label for="' . $idBase . '[select]">Select existing person</label></b>';
 	}
-	
+
 	// HTML for the pulldown menu to select an existing entry
 	private function pulldownHTML($idBase, $nameBase, $enabled) {
 		if ($enabled) {
@@ -302,11 +302,11 @@ class person extends data {
 		echo '
 					</select>';
 	}
-	
+
 	// In some rare cases, there is a second group rep or meeting co-sponsor.  Add a button to add or delete them
 	public function toggleButton($idBase, $nameBase, $state, $type) {
 		// Set initial values based on whether there's an existing second rep or second co-sponsor
-		
+
 		// Select initial state of button (add/remove/none)
 		switch ($state) {
 			case 0: 	// This person does not exist and is the second person: no buttons
@@ -331,7 +331,7 @@ class person extends data {
 				$exists = '1';
 				break;
 		}
-		
+
 		 // Use two different buttons: "add" and "delete" and hide or show them accordingly (handled by secondbuttons.js)
 		echo '
 				<input type="hidden" id="' . $idBase . '[exists]" name="' . $nameBase . '[exists]" value="' . $exists . '">
@@ -342,10 +342,10 @@ class person extends data {
 					secondbuttons("' . $idBase . '");
 					</script>'; */
 	}
-	
+
 	// Simple tabular code for displaying a person in view.php
 	public function outputHTML() {
-		
+
 		// Check to see if this person is rep at any group
 		$sqlRep = "SELECT `ID`, `Name`, `Active` FROM groups  WHERE `Rep`=:Rep;";
 		$stmtRep = $this->db->prepare($sqlRep);
@@ -357,7 +357,7 @@ class person extends data {
 				$rowsRep[] = $rowRep;
 			}
 		}
-		
+
 		// Check to see if this person is second rep at any group
 		$sqlRep2 = "SELECT `ID`, `Name`, `Active` FROM groups  WHERE `Rep2`=:Rep2;";
 		$stmtRep2 = $this->db->prepare($sqlRep2);
@@ -369,7 +369,7 @@ class person extends data {
 				$rowsRep2[] = $rowRep2;
 			}
 		}
-		
+
 		// Check to see if this person is sponsor of any meeting
 		$sqlSponsor = "SELECT `ID`, `DisplayID`, `Active` FROM meetings  WHERE `Sponsor`=:Sponsor;";
 		$stmtSponsor = $this->db->prepare($sqlSponsor);
@@ -380,8 +380,8 @@ class person extends data {
 				$foundSponsor = true;
 				$rowsSponsor[] = $rowSponsor;
 			}
-		}		
-		
+		}
+
 		// Check to see if this person is co-sponsor of any meeting
 		$sqlCoSponsor = "SELECT `ID`, `DisplayID`, `Active` FROM meetings  WHERE `CoSponsor`=:CoSponsor;";
 		$stmtCoSponsor = $this->db->prepare($sqlCoSponsor);
@@ -404,8 +404,8 @@ class person extends data {
 				$foundCoSponsor2 = true;
 				$rowsCoSponsor2[] = $rowCoSponsor2;
 			}
-		}			
-		
+		}
+
 		// Display HTML
 		include('header.php');
 		echo '
@@ -456,7 +456,7 @@ class person extends data {
 					</td>
 					<td width="20">
 					<td>';
-		
+
 		// Output roles from queries above
 		if ($foundRep) {
 			foreach($rowsRep as $row) {
@@ -485,7 +485,7 @@ class person extends data {
 		}
 		echo '
 					</td>
-				</tr>';				
+				</tr>';
 				// Display navigation buttons at end
 		echo '
 			</table>
@@ -494,11 +494,11 @@ class person extends data {
 			<a class="button" href="form.php">Add New</a>
 		</body>
 		</html>';
-	}	
-	
-	// Function to display outputs if using viewall.php in a table	
+	}
+
+	// Function to display outputs if using viewall.php in a table
 	public function outputsHTML() {
-	
+
 		// Header HTML (include tables.css)
 		include('header.php');
 		echo '
@@ -552,7 +552,7 @@ class person extends data {
 			<a class="button" href="form.php">Add New</a>
 		</body>
 		</html>';
-	}	
+	}
 
 }
 

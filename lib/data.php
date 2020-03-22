@@ -13,7 +13,7 @@ are handled by the extension classes.
 class data {
 	// All of these members are defined by classes extending data class or in the constructor
 	protected $db;					// database
-	protected $table;				// table name	
+	protected $table;				// table name
 	protected $idField;				// sql field
 	protected $id;					// sql value
 	protected $idParamType = PDO::PARAM_INT;	// type of pdo parameter that the ID field is
@@ -24,7 +24,7 @@ class data {
 	protected $params = array();	// paramaters, or arguments
 	protected $numParams;			// number of parameters
 	protected $total=0;				// count of rows for querying entire table
-	
+
 	function __construct() {
 		date_default_timezone_set('America/New_York');	// Set time zone because Ampps requires it
 		if (func_num_args() == 1) {		// db pdo only object -> initialize empty members
@@ -55,11 +55,11 @@ class data {
 			die('Invalid number of arguments (' . func_num_args() . ') for data class!');
 		}
 	}
-	
+
 	protected function parseInput($inputs) {
 		// empty function will be invoked by extending classes
 	}
-	
+
 	protected function parseOutput() {
 		// empty function will be invoked by extending classes
 	}
@@ -142,7 +142,7 @@ class data {
 				$stmt->bindValue(":" . $this->fields[$i], $this->params[$i], $this->fieldTypes[$i]);
 			}
 			$stmt->execute();	// Run query
-			
+
 			$this->id = $this->db->lastInsertId();	// Grab the ID of the last inserted record and save it!
 		}
 		catch(PDOException $e) {
