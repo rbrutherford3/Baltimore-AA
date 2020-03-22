@@ -3,7 +3,7 @@
 // PHP file to allow a group to view a meeting assignment for any given month.  
 // Navigation is based on number of months since most recent assignment entry
 
-include_once '../lib/dbconnect.php';
+include_once '../lib/dbconnectview.php';
 include_once '../lib/header.php';
 include_once '../lib/group.php';
 

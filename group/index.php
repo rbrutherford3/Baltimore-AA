@@ -2,7 +2,7 @@
 
 // Navigation page for Baltimore AA groups to view their assignments.  Simple
 
-include_once '../lib/dbconnect.php';
+include_once '../lib/dbconnectview.php';
 
 // Grab all active groups
 $sql = "SELECT ID, Name FROM groups WHERE ACTIVE=1 ORDER BY Name ASC;";

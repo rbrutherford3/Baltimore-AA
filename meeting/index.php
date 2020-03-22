@@ -2,7 +2,7 @@
 
 // Navigation page for Baltimore AA meetings to view their assignments.  Simple
 
-include_once '../lib/dbconnect.php';
+include_once '../lib/dbconnectview.php';
 include_once '../lib/datatypes.php';
 
 // Grab all active groups
