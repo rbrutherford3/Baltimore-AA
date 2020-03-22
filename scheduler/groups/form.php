@@ -44,12 +44,12 @@ else {
 // Load javascript files, set title, initiate form (note that the validate form function
 // accepts all the form element string bases)
 echo '
-	<link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="/lib/main.css">
-	<script type="text/javascript" src="/lib/personbuttons.js"></script>
-	<script type="text/javascript" src="/lib/secondbuttons.js"></script>
+	<link href="' . $libloc . 'bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="' . $libloc . 'main.css">
+	<script type="text/javascript" src="' . $libloc . 'personbuttons.js"></script>
+	<script type="text/javascript" src="' . $libloc . 'secondbuttons.js"></script>
 	<script type="text/javascript" src="validate.js"></script>
-	<script type="text/javascript" src="/lib/validate.js"></script>
+	<script type="text/javascript" src="' . $libloc . 'validate.js"></script>
 	
 	<title>Institution Committee - ' . $title . '</title>
 </head>

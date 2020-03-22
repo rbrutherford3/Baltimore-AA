@@ -18,8 +18,8 @@ echo '
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="/lib/main.css">
-	<link rel="icon" type="image/png" href="favicon.ico">
+	<link rel="stylesheet" type="text/css" href="../lib/main.css">
+	<link rel="icon" type="image/png" href="../favicon.ico">
 	<title>Baltimore AA Institution Committee Schedule</title>
 </head>
 <body>

@@ -10,8 +10,8 @@ include_once '../../lib/dbconnect.php';
 include_once '../../lib/person.php';
 include_once '../../lib/header.php';
 
-echo '<link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="/lib/main.css">';
+echo '<link href="' . $libloc . 'bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="' . $libloc . 'main.css">';
 
 // Form string variables (employing array method for form elements)
 $formName = 'form';
@@ -46,7 +46,7 @@ else {
 // accepts all the form element string bases)
 echo ' 
 	<script type="text/javascript" src="validate.js"></script>
-	<script type="text/javascript" src="/lib/validate.js"></script>
+	<script type="text/javascript" src="' . $libloc . 'validate.js"></script>
 	<title>Institution Committee - ' . $title . '</title>
 </head>
 <body>

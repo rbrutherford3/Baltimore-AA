@@ -10,8 +10,8 @@ include_once '../../lib/dbconnect.php';
 include_once '../../lib/institution.php';
 include_once '../../lib/header.php';
 
-echo '<link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="/lib/main.css">';
+echo '<link href="' . $libloc . 'bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="' . $libloc . 'main.css">';
 
 // Form string variables (employing array method for form elements)
 $formName = 'form';

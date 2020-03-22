@@ -605,7 +605,7 @@ class meeting extends data {
 		// Header HTML (include tables.css)
 		include('header.php');
 		echo '
-			<link rel="stylesheet" type="text/css" href="/lib/tables.css">
+			<link rel="stylesheet" type="text/css" href="' . $libloc . 'tables.css">
 			<title>Institution Committee - View Meetings</title>
 		</head>
 		<body>';
