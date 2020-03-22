@@ -65,7 +65,7 @@ function backup_tables($DBH, $tables) {
 
 		$return="";
 		//uncomment below if you want 'DROP TABLE IF EXISTS' displayed
-		//$return.= 'DROP TABLE IF EXISTS `'.$table.'`;'; 
+		$return.= 'DROP TABLE IF EXISTS `'.$table.'`;'; 
 
 		//table structure
 		$pstm2 = $DBH->query("SHOW CREATE TABLE $table");
