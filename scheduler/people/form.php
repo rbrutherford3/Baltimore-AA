@@ -9,12 +9,13 @@ the member functions of person.php
 include_once '../../lib/dbconnect.php';
 include_once '../../lib/person.php';
 include_once '../../lib/header.php';
+include_once '../../lib/recaptcha.php';
 
 echo '<link href="' . $libloc . 'bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="' . $libloc . 'main.css">';
 
 // Form string variables (employing array method for form elements)
-$formName = 'form';
+$formName = 'personform';
 $personBase = 'person';
 
 // Edit person if ID provided
@@ -46,7 +47,9 @@ else {
 // accepts all the form element string bases)
 echo ' 
 	<script type="text/javascript" src="validate.js"></script>
-	<script type="text/javascript" src="' . $libloc . 'validate.js"></script>
+	<script type="text/javascript" src="' . $libloc . 'validate.js"></script>';
+echo recaptcha::javascript();
+echo '
 	<title>Institution Committee - ' . $title . '</title>
 </head>
 <body>
@@ -77,7 +80,7 @@ echo '</div>';
 echo '<div class="row">';
 echo '<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">';
 echo '<p>';
-echo '<input type="submit" value="Submit">';
+echo recaptcha::submitbutton('personsubmit', 'Save', 'submit', false, false);
 echo '</p>';
 echo '</div>';
 echo '<div class="col-lg-9 col-md-8" style="text-align: center;">';

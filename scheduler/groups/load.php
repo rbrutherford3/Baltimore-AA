@@ -10,12 +10,15 @@ include_once '../../lib/dbconnect.php';
 include_once '../../lib/person.php';
 include_once '../../lib/group.php';
 include_once '../../lib/loadperson.php';
+include_once '../../lib/recaptcha.php';
 
 // Define form element root names
 $formName = 'form';
 $groupBase = 'group';
 $rep1Base = 'rep1';
 $rep2Base = 'rep2';
+
+recaptcha::verify(false);
 
 // Get ID based on input method for person
 $rep1ID = loadPerson($db, $rep1Base);

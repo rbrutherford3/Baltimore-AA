@@ -10,6 +10,7 @@ include_once 'datatypes.php';
 include_once 'meeting.php';
 include_once 'group.php';
 include_once 'dbconnect.php';
+include_once 'recaptcha.php';
 date_default_timezone_set('America/New_York');
 
 // Class assignment, has only one function: viewAll
@@ -279,7 +280,9 @@ class assignment {
 			// Header HTML (include tables.css)
 			echo '
 				<script type="text/javascript" src="' . $libloc . 'reload.js"></script>
-				<script type="text/javascript" src="matchCheck.js"></script>
+				<script type="text/javascript" src="matchCheck.js"></script>';
+			echo recaptcha::javascript();
+			echo '
 				<link rel="stylesheet" type="text/css" href="' . $libloc . 'tables.css">
 				<title>Institution Committee - View Assignments</title>
 			</head>
@@ -287,12 +290,15 @@ class assignment {
 
 			// Start Body HTML, define table and table headers
 			echo '
-				<form name="form" action="load.php" method="post">
+				<form name="form" id="form" action="load.php" method="post">';
+			echo recaptcha::tokeninput();
+			echo '
 				<h1>Institution Assignments</h1>
 				<p>
 				<a class="button" href="../">Home</a>
-				<a class="button" href="viewall.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . ' ">Back</a>
-				<input type="submit" value="Save">
+				<a class="button" href="viewall.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . ' ">Back</a>';
+			echo recaptcha::submitbutton('submit1', 'Save', 'submit', false, false);
+			echo '
 				</p>
 				<input name="month" type="hidden" value="' . $monthQ . '">
 				<input name="year" type="hidden" value="' . $yearQ . '">
@@ -302,7 +308,10 @@ class assignment {
 		else {
 			// Header HTML
 			echo '
-				<script type="text/javascript" src="' . $libloc . 'reload.js"></script>
+				<script type="text/javascript" src="' . $libloc . 'reload.js"></script>';
+			echo recaptcha::javascript();
+			echo '
+				
 				<link rel="stylesheet" type="text/css" href="' . $libloc . 'tables.css">
 				<title>Institution Committee - Edit Assignments</title>
 			</head>
@@ -311,7 +320,9 @@ class assignment {
 			// Add option to automatically finish missing entries if in a one-month view of all groups and meetings
 			if ($monthView && !$complete) {
 				echo '
-				<form name="form" action="fillform.php" method="post">
+				<form name="form" action="fillform.php" method="post">';
+			echo recaptcha::tokeninput();
+			echo '
 				<input type="hidden" name="month" value="' .  $month . '">
 				<input type="hidden" name="year" value="' . $year . '">';
 			}
@@ -328,8 +339,9 @@ class assignment {
 					<a class="button" href="export.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . '">Export</a>';
 							// Add option to automatically finish missing entries if in a one-month view of all groups and meetings
 				if ($monthView && !$complete) {
-					echo '
-					<input type="submit" value="Fill missing entries" style="background-color:red;">';
+					echo recaptcha::submitbutton('submit1', 'Fill Missing Entries', 'submit', false, false);
+					//echo '
+					//<input type="submit" value="Fill missing entries" style="background-color:red;">';
 				}
 			}
 			echo '
@@ -556,8 +568,9 @@ class assignment {
 				echo '
 					<p>
 					<a class="button" href="../">Home</a>
-					<a class="button" href="viewall.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . ' ">Back</a>
-					<input type="submit" value="Save">
+					<a class="button" href="viewall.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . ' ">Back</a>';
+				echo recaptcha::submitbutton('submit2', 'Save', 'submit', false, false);
+				echo '
 					</p>
 					</form>';
 			}
@@ -570,8 +583,9 @@ class assignment {
 					<a class="button" href="edit.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . '">Edit</a>
 					<a class="button" href="export.php?month=' . $monthQ . '&year=' . $yearQ . '&group=' . $groupQ . '&meeting=' . $meetingQ . '&sort=' . $sort . '">Export</a>';
 				if ($monthView && !$complete) {
-					echo '
-					<input type="submit" value="Fill missing entries" style="background-color:red;">';
+					echo recaptcha::submitbutton('submit2', 'Fill missing entries', 'submit', false, false);
+					//echo '
+					//<input type="submit" value="Fill missing entries" style="background-color:red;">';
 				}
 				echo '
 					</p>';

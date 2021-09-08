@@ -8,9 +8,12 @@ Form processing, updating database, and forwarding to view page
 // Include files
 include_once '../../lib/dbconnect.php';
 include_once '../../lib/institution.php';
+include_once '../../lib/recaptcha.php';
 // Define form element root names
 $formName = 'form';
 $institutionBase = 'institution';
+
+recaptcha::verify(false);
 
 // Compile institution object
 if (isset($_POST[$institutionBase]['id'])) {	// Update db if editing

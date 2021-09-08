@@ -3,6 +3,12 @@
 include_once '../../lib/datatypes.php';
 include_once '../../lib/dbconnect.php';
 include_once '../../lib/header.php';
+include_once '../../lib/recaptcha.php';
+
+if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
+	recaptcha::verify(true);
+}
+
 echo '
 	<title>Institution Committee - Loading...</title>
 	</head>

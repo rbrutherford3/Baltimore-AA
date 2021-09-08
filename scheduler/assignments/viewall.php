@@ -4,6 +4,11 @@
 
 include_once '../../lib/assignment.php';
 include_once '../../lib/dbconnect.php';
+include_once '../../lib/recaptcha.php';
+
+if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
+	recaptcha::verify(false);
+}
 
 // Grab parameters from URL
 if (!isset($_GET['month']) || empty($_GET['month'])) {

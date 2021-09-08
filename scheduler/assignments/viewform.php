@@ -4,13 +4,17 @@
 
 include '../../lib/header.php';
 include '../../lib/dbconnect.php';
-echo '
-	<title>Institution Committee - Assignment Search Tool</title>
-	</head>
-	<body>';
+include '../../lib/recaptcha.php';
 
 echo '
-	<form action="viewall.php" method="get">
+	<title>Institution Committee - Assignment Search Tool</title>';
+echo recaptcha::javascript();
+echo '
+	</head>
+	<body>
+	<form name="form" id="form" action="viewall.php" method="post">';
+//echo recaptcha::tokeninput();
+echo '
 	<h1>Assignment Search Tool</h1>';
 
 // Get maximum and minimum years of assignments
@@ -97,8 +101,9 @@ echo '
 // Navigation buttons
 echo '
 	<p>
-	<a class="button" href="../">Home</a>
-	<input type="submit" value="Submit">
+	<a class="button" href="../">Home</a>';
+echo recaptcha::submitbutton('searchbutton', 'Search', 'submit', false, true);
+echo '
 	</p>
 	</form>
 </body>

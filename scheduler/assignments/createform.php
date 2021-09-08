@@ -4,6 +4,8 @@
 
 include_once '../../lib/header.php';
 include_once '../../lib/dbconnect.php';
+include_once '../../lib/header.php';
+include_once '../../lib/recaptcha.php';
 
 // Find the latest date in the assignment table
 $queryDate = "SELECT MAX(a.`Date`) AS `maxdate` FROM `assignments` a;";
@@ -30,23 +32,27 @@ if ($queryDateSuccess) {
 
 	// Header info
 	echo '
-		<title>Institution Committee - Meeting Assignment Creation Tool</title>
-		</head>
-		<body>';
-
+		<title>Institution Committee - Meeting Assignment Creation Tool</title>';
+	echo recaptcha::javascript();
+	
 	// Quick check to make sure user wants to overwrite existing data, if so selected
 	echo '
 		<script>
-			function check(form) {
-				if(document.getElementById("oldmonth").checked) {
-					return confirm("THIS OPERATION WILL OVERWRITE PREVIOUSLY CREATED ASSIGNMENTS FOR ' . strtoupper($oldMonth->format('F Y')) . '!!!  Continue?");
+			function warn() {
+				if (confirm("THIS OPERATION WILL OVERWRITE PREVIOUSLY CREATED ASSIGNMENTS FOR ' . strtoupper($oldMonth->format('F Y')) . '!!!  Continue?")) {
+					document.getElementById("oldmonth").checked = true;
+				}
+				else {
+					document.getElementById("newmonth").checked = true;
 				}
 			}
-		</script>';
+		</script>
+		</head>
+		<body>';
 
 	// Start form
 	echo '
-		<form onsubmit="return check(this)"; name="form" action="create.php" method="post">';
+		<form name="pageform" id="pageform" action="create.php" method="post">';
 
 	// Header
 	echo '
@@ -57,7 +63,7 @@ if ($queryDateSuccess) {
 		<p>
 			<input id="newmonth" type="radio" name="monthyear" value="' . $newMonth->format('Y-m') . '" checked>
 			<label for="newmonth">Next Month (' . $newMonth->format('F Y') . ')</label><br>
-			<input id="oldmonth" type="radio" name="monthyear" value="' . $oldMonth->format('Y-m') . '">
+			<input id="oldmonth" type="radio" name="monthyear" value="' . $oldMonth->format('Y-m') . '" onclick="warn();">
 			<label for="oldmonth">Prev Month (' . $oldMonth->format('F Y') . ')</label> <font color="red">OVERWRITES EXISTING DATA!</font>
 		</p>
 		<br>';
@@ -95,9 +101,11 @@ if ($queryDateSuccess) {
 	// Navigation buttons
 	echo '
 		<p>
-		<a class="button" href="../">Home</a>
-		<input type="submit" value="Submit">
+		<a class="button" href="../">Home</a>';
+	echo recaptcha::submitbutton('createformsubmit', 'Submit', 'submit', false, false);
+	echo '
 		</p>
+	</form>
 	</body>
 	</html>';
 }

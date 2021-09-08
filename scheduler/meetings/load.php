@@ -9,9 +9,11 @@ include_once '../../lib/person.php';
 include_once '../../lib/meeting.php';
 include_once '../../lib/loadperson.php';
 include_once '../../lib/loadinstitution.php';
+include_once '../../lib/recaptcha.php';
+
+recaptcha::verify(false);
 
 // Define form element root names
-$formName = 'form';
 $meetingBase = 'meeting';
 $institutionBase = 'institution';
 $sponsorBase = 'spons';

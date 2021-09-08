@@ -5,6 +5,7 @@
 // Setup dates, using next month
 include_once '../../lib/header.php';
 include_once '../../lib/dbconnect.php';
+include_once '../../lib/recaptcha.php';
 
 $month = $_POST['month'];
 $year = $_POST['year'];
@@ -29,7 +30,9 @@ if ($queryDateSuccess) {
 	if (((int)$lastMonth->format('n')==(int)$month) && ((int)$lastMonth->format('Y')==(int)$year)) {
 		// Header info
 		echo '
-			<title>Institution Committee - Assignment Creation Tool</title>
+			<title>Institution Committee - Assignment Creation Tool</title>';
+		echo recaptcha::javascript();
+		echo '
 			</head>
 			<body>';
 
@@ -63,8 +66,9 @@ if ($queryDateSuccess) {
 		// Navigation buttons
 		echo '
 			<p>
-			<a class="button" href="../">Home</a>
-			<input type="submit" value="Submit">
+			<a class="button" href="../">Home</a>';
+		echo recaptcha::submitbutton('formsubmit', 'Submit', 'submit', false, false);
+		echo '
 			</p>
 			</form>
 		</body>

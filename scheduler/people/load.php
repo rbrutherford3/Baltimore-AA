@@ -8,6 +8,10 @@ Form processing, updating database, and forwarding to view page
 // Include files
 include_once '../../lib/dbconnect.php';
 include_once '../../lib/person.php';
+include_once '../../lib/recaptcha.php';
+
+recaptcha::verify(false);
+
 // Define form element root names
 $formName = 'form';
 $personBase = 'person';

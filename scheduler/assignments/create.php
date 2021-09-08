@@ -6,6 +6,11 @@ Creates sponsor's nights using given criteria.  Lots of SQL.
 include_once '../../lib/dbconnect.php';
 include_once '../../lib/group.php';
 include_once '../../lib/header.php';
+include_once '../../lib/recaptcha.php';
+
+if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
+	recaptcha::verify(false);
+}
 
 set_time_limit(120);
 
@@ -39,7 +44,7 @@ $institutions = $_POST['institutions'];
 
 // Grab history (number of months to look back at the whether a group has been to
 // the same institution or not)
-$history = $_POST['history'];
+//$history = $_POST['history'];
 
 // Grab cutoff date (meetings before this date automatically get sponsors' nights)
 $cutoff = $_POST['cutoff'];

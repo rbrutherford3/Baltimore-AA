@@ -9,9 +9,10 @@ the member functions person and group
 include_once '../../lib/dbconnect.php';
 include_once '../../lib/group.php';
 include_once '../../lib/header.php';
+include_once '../../lib/recaptcha.php';
 
 // Form string variables (employing array method for form elements)
-$formName = 'form';
+$formName = 'groupform';
 $groupBase = 'group';
 $rep1Base = 'rep1';
 $rep2Base = 'rep2';
@@ -49,7 +50,9 @@ echo '
 	<script type="text/javascript" src="' . $libloc . 'personbuttons.js"></script>
 	<script type="text/javascript" src="' . $libloc . 'secondbuttons.js"></script>
 	<script type="text/javascript" src="validate.js"></script>
-	<script type="text/javascript" src="' . $libloc . 'validate.js"></script>
+	<script type="text/javascript" src="' . $libloc . 'validate.js"></script>';
+	echo recaptcha::javascript();
+	echo '
 
 	<title>Institution Committee - ' . $title . '</title>
 </head>
@@ -114,8 +117,9 @@ echo '
 	</div>
 	<div class="row">
 		<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">
-			<p>
-				<input type="submit" value="Submit">
+			<p>';
+echo recaptcha::submitbutton('groupsubmit', 'Save', 'submit', false, false);
+echo '
 			</p>
 		</div>
 		<div class="col-lg-3 col-md-4" style="min-width: 350px; text-align: center;">
