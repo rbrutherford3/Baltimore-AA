@@ -11,16 +11,12 @@ echo '<!--Created by Robert Rutherford, 2017-->
 	<link rel="icon" type="image/png" href="/favicon.ico">';
 
 function abspathHTML () {
-        $ds = DIRECTORY_SEPARATOR;
-        $dsHTML = '/';
-        $curdir = __DIR__ . $ds;
-        $rootdir = $_SERVER['DOCUMENT_ROOT'];
-        if (substr($curdir, 0, strlen($rootdir)) == $rootdir) {
-                $abspath = substr($curdir, strlen($rootdir));
-        }
-        else {
-                $abspath = $dsHTML; // just to have all bases covered
-        }
-        return str_replace($ds, $dsHTML, $abspath);
+    $ds = DIRECTORY_SEPARATOR;
+    $dsHTML = '/';
+    $a = strlen(__DIR__) - 3;
+    $b = strlen(getcwd()) + strlen(basename($_SERVER['REQUEST_URI'])) + 1;
+    $len_root = strlen($_SERVER['REQUEST_URI']) - ($b - $a);
+    $root = substr($_SERVER['REQUEST_URI'], 0, $len_root);
+    return str_replace($ds, $dsHTML, $root) . 'lib' . $dsHTML;
 }
 ?>
