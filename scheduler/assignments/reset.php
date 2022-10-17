@@ -1,6 +1,9 @@
 <?php
 include_once '../../lib/dbconnect.php';
 include_once '../../lib/header.php';
+
+$db = database::connect();
+
 echo '
 	<title>Institution Committee - Loading...</title>
 	</head>

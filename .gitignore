@@ -1,4 +1,3 @@
-lib/dbconnect*.php
 credentials*
 .git-ftp-ignore
 sys/

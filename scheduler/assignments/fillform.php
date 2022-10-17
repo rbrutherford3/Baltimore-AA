@@ -7,6 +7,8 @@ include_once '../../lib/header.php';
 include_once '../../lib/dbconnect.php';
 include_once '../../lib/recaptcha.php';
 
+$db = database::connect();
+
 $month = $_POST['month'];
 $year = $_POST['year'];
 

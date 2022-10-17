@@ -9,7 +9,6 @@ include_once 'data.php';
 include_once 'datatypes.php';
 include_once 'meeting.php';
 include_once 'group.php';
-include_once 'dbconnect.php';
 include_once 'recaptcha.php';
 date_default_timezone_set('America/New_York');
 
@@ -894,71 +893,4 @@ class assignment {
 	}
 }
 
-/* class assignment extends data {
-
-	// Define all default properties.  Data class uses this information to process SQL statements
-	protected $db;
-	protected $table = 'assignments';
-	protected $idField = 'ID';
-	protected $fields = array('`Date`', '`Meeting`', '`Group`');
-	protected $fieldTypes = array(PDO::PARAM_STR, PDO::PARAM_INT, PDO::PARAM_INT);
-	protected $lookupFields = array(0, 1);
-	protected $sortFields = array(0, 1);
-	protected $params = array();
-	protected $numParams = 3;
-
-	protected function parseInput($inputs) {
-		if (is_null($inputs)) {	// If no inputs, then start with empty members
-			$this->mdate = new mdate();
-			$this->meeting = new meeting($this->db);
-			$this->group = new group($this->db);
-		}
-		else {
-			// Store inputs into members
-			$this->mdate = new mdate($inputs[0]);
-			$this->meeting = new meeting($this->db, $inputs[1]);
-			$this->group = new group($this->db, $inputs[2]);
-
-			// Store the parameters used for SQL statements from the members
-			$this->params[0] = $this->mdate->getValue();
-			$this->params[1] = $this->meeting->getID();
-			$this->params[2] = $this->group->getID();
-		}
-	}
-
-	// Parse results from SQL view function into group members.  Note that this
-	// will overwrite any members defined in the constructor
-	protected function parseOutput() {
-		$this->mdate = new mdate($this->params[0]);
-		$this->meeting = new meeting($this->db, $this->params[1]);
-		$this->group = new group($this->db, $this->params[2]);
-	}
-
-	// Do the same with arrays for viewall.  Note that these have to be different
-	// names from the members, otherwise it will overwrite them
-	protected function parseOutputs() {
-		$this->mdates[] = new mdate($this->params[0]);
-		$this->meetings[] = new meeting($this->db, $this->params[1]);
-		$this->groups[] = new group($this->db, $this->params[2]);
-	}
-
-	// Public 'get' functions to grab individual members
-	public function getMDate() {
-		return $this->mdate();
-	}
-	public function getMeeting() {
-		return $this->meeting;
-	}
-	public function getGroup() {
-		return $this->group;
-	}
-
-	// Debugging code to output members.  Possibly depricated.
-	public function output() {
-		echo $this->id . '<br>';
-		echo '&nbsp&nbsp' . $this->mdate->getFormatted() . '<br>';
-		echo '&nbsp&nbsp' . $this->meeting->getID() . '<br>';
-		echo '&nbsp&nbsp' . $this->group->getID() . '<br>';
-	}
-} */
 ?>

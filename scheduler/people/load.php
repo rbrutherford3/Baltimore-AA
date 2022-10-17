@@ -10,6 +10,8 @@ include_once '../../lib/dbconnect.php';
 include_once '../../lib/person.php';
 include_once '../../lib/recaptcha.php';
 
+$db = database::connect();
+
 recaptcha::verify(false);
 
 // Define form element root names

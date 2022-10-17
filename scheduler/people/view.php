@@ -7,6 +7,8 @@ View a person. Very simple file, as all the HTML is stored in the objects as pub
 include_once '../../lib/dbconnect.php';
 include_once '../../lib/person.php';
 
+$db = database::connect();
+
 // If there's a person ID, then declare a person object and output the view HTML
 if (isset($_GET['id'])) {
 	$id = $_GET['id'];

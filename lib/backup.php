@@ -1,18 +1,9 @@
 <?php
 
-// Check to see if there is a second "dummy" database connection file
-if (file_exists('dbconnect2.php')) {
-	$dummyDB = true;
-}
-else  {
-	$dummyDB = false;
-}
-
 // Connect to the one, possibly two, databases
 include_once 'dbconnect.php';
-if ($dummyDB) {
-	include_once 'dbconnect2.php';
-}
+
+$db = database::connect();
 
 // Call functions...
 
@@ -20,9 +11,6 @@ if ($dummyDB) {
 //leave empty to do all
 $tables = array();
 $sqlDump = backup_tables($db, $tables);
-if ($dummyDB) {
-	mirrorDB($db2, $sqlDump);
-}
 saveFile($sqlDump);
 
 // Function to create sql dump string from a database connection

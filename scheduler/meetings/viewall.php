@@ -6,6 +6,8 @@ View all meetings.  Very simple, as all the HTML is stored in the objects as pub
 include_once '../../lib/dbconnect.php';
 include_once '../../lib/meeting.php';
 
+$db = database::connect();
+
 $meeting = new meeting($db);
 
 $meeting->viewAll();

@@ -6,6 +6,8 @@ View all institutions.  Very simple, as all the HTML is stored in the objects as
 include_once '../../lib/dbconnect.php';
 include_once '../../lib/institution.php';
 
+$db = database::connect();
+
 $institution = new institution($db);
 
 $institution->viewAll();

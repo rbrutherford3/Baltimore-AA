@@ -8,6 +8,8 @@ include_once '../../lib/group.php';
 include_once '../../lib/header.php';
 include_once '../../lib/recaptcha.php';
 
+$db = database::connect();
+
 if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
 	recaptcha::verify(false);
 }

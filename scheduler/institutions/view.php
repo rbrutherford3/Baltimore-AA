@@ -7,6 +7,8 @@ View an institution. Very simple file, as all the HTML is stored in the objects 
 include_once '../../lib/dbconnect.php';
 include_once '../../lib/institution.php';
 
+$db = database::connect();
+
 // If there's an institution ID, then declare an institution object and output the view HTML
 if (isset($_GET['id'])) {
 	$id = $_GET['id'];

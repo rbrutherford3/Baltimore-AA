@@ -7,6 +7,8 @@ include_once '../../lib/dbconnect.php';
 include_once '../../lib/header.php';
 include_once '../../lib/recaptcha.php';
 
+$db = database::connect();
+
 // Find the latest date in the assignment table
 $queryDate = "SELECT MAX(a.`Date`) AS `maxdate` FROM `assignments` a;";
 $stmtDate = $db->prepare($queryDate);

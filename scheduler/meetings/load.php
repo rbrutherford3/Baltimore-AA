@@ -11,6 +11,8 @@ include_once '../../lib/loadperson.php';
 include_once '../../lib/loadinstitution.php';
 include_once '../../lib/recaptcha.php';
 
+$db = database::connect();
+
 recaptcha::verify(false);
 
 // Define form element root names

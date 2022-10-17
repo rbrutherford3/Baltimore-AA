@@ -11,6 +11,8 @@ include_once '../../lib/meeting.php';
 include_once '../../lib/header.php';
 include_once '../../lib/recaptcha.php';
 
+$db = database::connect();
+
 // Form string variables (employing array method for form elements)
 $formName = 'meetingform';
 $meetingBase = 'meeting';

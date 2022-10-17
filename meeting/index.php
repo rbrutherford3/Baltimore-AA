@@ -5,6 +5,8 @@
 include_once '../lib/dbconnectview.php';
 include_once '../lib/datatypes.php';
 
+$db = database::connect();
+
 // Grab all active groups
 $sql = "SELECT m.`ID`, m.`DisplayID`, i.`Name`, m.`DOW`, m.`Time`, m.`Gender`
 FROM meetings m

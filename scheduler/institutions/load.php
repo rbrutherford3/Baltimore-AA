@@ -9,6 +9,9 @@ Form processing, updating database, and forwarding to view page
 include_once '../../lib/dbconnect.php';
 include_once '../../lib/institution.php';
 include_once '../../lib/recaptcha.php';
+
+$db = database::connect();
+
 // Define form element root names
 $formName = 'form';
 $institutionBase = 'institution';

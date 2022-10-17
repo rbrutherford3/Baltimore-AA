@@ -5,6 +5,8 @@
 include_once '../../lib/assignment.php';
 include_once '../../lib/dbconnect.php';
 
+$db = database::connect();
+
 // Grab the parameters from the URL
 if (!isset($_GET['month']) || empty($_GET['month'])) {
 	$month = null;

@@ -11,6 +11,8 @@ include_once '../../lib/institution.php';
 include_once '../../lib/header.php';
 include_once '../../lib/recaptcha.php';
 
+$db = database::connect();
+
 echo '<link href="' . $libloc . 'bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="' . $libloc . 'main.css">';
 

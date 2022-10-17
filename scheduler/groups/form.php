@@ -11,6 +11,8 @@ include_once '../../lib/group.php';
 include_once '../../lib/header.php';
 include_once '../../lib/recaptcha.php';
 
+$db = database::connect();
+
 // Form string variables (employing array method for form elements)
 $formName = 'groupform';
 $groupBase = 'group';

@@ -6,6 +6,8 @@ include '../../lib/header.php';
 include '../../lib/dbconnect.php';
 include '../../lib/recaptcha.php';
 
+$db = database::connect();
+
 echo '
 	<title>Institution Committee - Assignment Search Tool</title>';
 echo recaptcha::javascript();

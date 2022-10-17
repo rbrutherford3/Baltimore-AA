@@ -4,6 +4,8 @@
 
 include_once '../lib/dbconnectview.php';
 
+$db = database::connect();
+
 // Grab all active groups
 $sql = "SELECT ID, Name FROM groups WHERE ACTIVE=1 ORDER BY Name ASC;";
 $stmt = $db->prepare($sql);

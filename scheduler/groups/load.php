@@ -12,6 +12,8 @@ include_once '../../lib/group.php';
 include_once '../../lib/loadperson.php';
 include_once '../../lib/recaptcha.php';
 
+$db = database::connect();
+
 // Define form element root names
 $formName = 'form';
 $groupBase = 'group';

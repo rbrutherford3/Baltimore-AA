@@ -7,6 +7,8 @@ View a meeting. Very simple file, as all the HTMl is stored in the objects as pu
 include_once '../../lib/dbconnect.php';
 include_once '../../lib/meeting.php';
 
+$db = database::connect();
+
 // If there's a meeting ID, then declare a meeting object and output the view HTML
 if (isset($_GET['id'])) {
 	$id = $_GET['id'];

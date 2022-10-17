@@ -7,6 +7,8 @@ include_once '../lib/dbconnectview.php';
 include_once '../lib/header.php';
 include_once '../lib/group.php';
 
+$db = database::connect();
+
 // Grab parameters from URL (group ID & month relative to latest assignment entry)
 $id = (int)$_GET["id"];
 

@@ -7,6 +7,8 @@ View a group. Very simple file, as all the HTMl is stored in the objects as publ
 include_once '../../lib/dbconnect.php';
 include_once '../../lib/group.php';
 
+$db = database::connect();
+
 // If there's a group ID, then declare a group object and output the view HTML
 if (isset($_GET['id'])) {
 	$id = $_GET['id'];
