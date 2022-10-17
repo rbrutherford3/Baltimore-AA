@@ -1,3 +1,6 @@
 credentials*
 .git-ftp-ignore
 sys/
+data.sql
+new*.sql
+
