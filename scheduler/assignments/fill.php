@@ -123,10 +123,10 @@ if ($stmtAssignments->execute()) {
 						(SELECT DISTINCT `Group`
 							FROM assignments 
 							WHERE 
-							((MONTH(`Date`)=:createMonth AND YEAR(`Date`)=:createYear)
-							OR 
-							(MONTH(`Date`)=:pastMonth AND YEAR(`Date`)=:pastYear))
-							AND `Group` IS NOT NULL
+							MONTH(`Date`)=:createMonth
+							AND
+							YEAR(`Date`)=:createYear
+							AND `Group`IS NOT NULL
 						)
 					AND Active 
 					AND NOT Probation 
@@ -142,8 +142,6 @@ if ($stmtAssignments->execute()) {
 			$stmtGroups->bindValue(":meetingID", $meeting, PDO::PARAM_INT);
 			$stmtGroups->bindValue(":createMonth", $createMonth, PDO::PARAM_INT);
 			$stmtGroups->bindValue(":createYear", $createYear, PDO::PARAM_INT);
-			$stmtGroups->bindValue(":pastMonth", $pastMonth, PDO::PARAM_INT);
-			$stmtGroups->bindValue(":pastYear", $pastYear, PDO::PARAM_INT);
 			$stmtGroups->bindValue(":dow", $dowN, PDO::PARAM_INT);
 			$stmtGroups->execute();
 
