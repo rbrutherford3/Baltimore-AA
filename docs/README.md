@@ -10,7 +10,7 @@ This is a PHP/MySQL database management system for the Baltimore AA Institution 
 
 There is also a tool for optionally matching AA groups to the institution meetings automatically, with the ability to manually edit such assignments after the fact.
 
-See the [background section](#background) for a detailed description of the solution.  See [https://baltaa.spiffindustries.com/](https://baltaa.spiffindustries.com/) for a working demo.
+See the [background section](#background) for a detailed description of the solution.  See [https://spiffindustries.com/baltaa/](https://spiffindustries.com/baltaa/) for a working demo.
 
 ## Table of Contents
 
